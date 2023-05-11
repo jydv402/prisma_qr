@@ -1,7 +1,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.qr_scan_project">
+    package="com.example.qr_catto">
+    <uses-permission android:name="android.permission.CAMERA"/>
    <application
-        android:label="qr_scan_project"
+        android:label="qr_catto"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

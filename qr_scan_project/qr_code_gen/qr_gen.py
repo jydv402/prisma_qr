@@ -2,15 +2,15 @@ import json
 import qrcode
       
 # color hex codes
-colors = ["F79256","FBD1A2","7DCFB6","00B2CA","1D4E89"]
+var = ["a","b","c","d","e","f","g","h","i","j"]
 
 # Data to be written 
 dictionary ={ 
-  "color": "ffffff"
+  "var": "a"
 } 
       
-for i in colors:
-    dictionary["color"]=str(i)
+for i in var:
+    dictionary["var"]=str(i)
 
     # Serializing json  
     json_object = json.dumps(dictionary) 

@@ -1,16 +1,34 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 
-class Homepage extends StatefulWidget {
-  const Homepage({super.key});
+import 'extnd.dart';
 
-  @override
-  State<Homepage> createState() => _HomepageState();
-}
+class Homepage extends StatelessWidget {
+  Homepage({super.key});
 
-class _HomepageState extends State<Homepage> {
+  final MobileScannerController cameraConroller = MobileScannerController();
+
   @override
   Widget build(BuildContext context) {
-    return const Scaffold();
+    return Scaffold(
+      extendBodyBehindAppBar: true,
+      body: MobileScanner(onDetect: (capture) {
+        for (var barcode in capture.barcodes) {
+          try {
+            Map decodedQr = jsonDecode(barcode.rawValue!.toString());
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const QuPage(),
+                ));
+            cameraConroller.stop();
+          } catch (r) {
+            debugPrint("Invalid QR Code");
+          }
+        }
+      }),
+    );
   }
 }

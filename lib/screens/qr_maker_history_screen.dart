@@ -1,0 +1,417 @@
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'settings_screen.dart';
+
+class QrMakerHistoryScreen extends StatelessWidget {
+  const QrMakerHistoryScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final bgColor = Theme.of(context).scaffoldBackgroundColor;
+
+    return Scaffold(
+      backgroundColor: bgColor,
+      body: SafeArea(
+        child: Column(
+          children: [
+            // 1. Header
+            Padding(
+              padding: const EdgeInsets.only(
+                left: 24,
+                right: 24,
+                top: 24,
+                bottom: 8,
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Good Morning,',
+                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      Text(
+                        'QR Creator',
+                        style: Theme.of(context).textTheme.headlineMedium
+                            ?.copyWith(fontWeight: FontWeight.bold),
+                      ),
+                    ],
+                  ),
+                  Container(
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).colorScheme.surface,
+                      shape: BoxShape.circle,
+                      border: Border.all(
+                        color: isDark ? Colors.grey[800]! : Colors.grey[200]!,
+                      ),
+                    ),
+                    child: IconButton(
+                      icon: Icon(
+                        Icons.settings,
+                        color: isDark ? Colors.white : Colors.grey[800],
+                      ),
+                      onPressed: () {
+                        Get.to(() => const SettingsScreen());
+                      },
+                    ),
+                  ),
+                ],
+              ),
+            ),
+
+            // Main Details (Scrollable)
+            Expanded(
+              child: ListView(
+                padding: const EdgeInsets.only(
+                  left: 20,
+                  right: 20,
+                  bottom: 120,
+                ),
+                children: [
+                  // 2. New Code Card
+                  _buildNewCodeCard(context),
+
+                  const SizedBox(height: 16),
+
+                  // 3. History Section
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Text(
+                        'History',
+                        style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      TextButton(
+                        onPressed: () {},
+                        child: Text(
+                          'View All',
+                          style: TextStyle(
+                            color: isDark ? Colors.grey[400] : Colors.grey[600],
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+
+                  const SizedBox(height: 8),
+
+                  // History List Items
+                  _buildHistoryItem(
+                    context,
+                    'Portfolio Link',
+                    'https://nixtio.design/portfolio',
+                    'URL',
+                    '10:42 AM',
+                    Colors.blue,
+                  ),
+                  const SizedBox(height: 12),
+                  _buildHistoryItem(
+                    context,
+                    'Guest Wi-Fi',
+                    'WPA: Home_Network_5G',
+                    'Wi-Fi',
+                    'Yesterday',
+                    Colors.purple,
+                  ),
+                  const SizedBox(height: 12),
+                  _buildHistoryItem(
+                    context,
+                    'Business Card',
+                    'John Doe - Product Designer',
+                    'Contact',
+                    'Mon 26th',
+                    Colors.green,
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildNewCodeCard(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
+    return Container(
+      padding: const EdgeInsets.all(24),
+      decoration: BoxDecoration(
+        color: Theme.of(context).colorScheme.surface,
+        borderRadius: BorderRadius.circular(32),
+        boxShadow: [
+          if (!isDark)
+            BoxShadow(
+              color: Colors.black.withOpacity(0.02),
+              blurRadius: 10,
+              offset: const Offset(0, 4),
+            ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: isDark ? Colors.grey[800] : Colors.grey[100],
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Icon(
+                  Icons.qr_code_2,
+                  color: isDark ? Colors.white : Colors.black,
+                  size: 20,
+                ),
+              ),
+              const SizedBox(width: 12),
+              Text(
+                'New Code',
+                style: Theme.of(
+                  context,
+                ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
+              ),
+            ],
+          ),
+          const SizedBox(height: 24),
+
+          // Input Field
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+            decoration: BoxDecoration(
+              color: isDark ? Colors.grey[800] : Colors.grey[50],
+              borderRadius: BorderRadius.circular(16),
+            ),
+            child: TextField(
+              decoration: InputDecoration(
+                icon: Icon(Icons.link, color: Colors.grey[400]),
+                hintText: 'Enter website URL or text',
+                border: InputBorder.none,
+                hintStyle: TextStyle(color: Colors.grey[400]),
+              ),
+            ),
+          ),
+
+          const SizedBox(height: 16),
+
+          // Type Selectors
+          Row(
+            children: [
+              Expanded(
+                child: _buildTypeSelector(
+                  context,
+                  'URL',
+                  Icons.link,
+                  isSelected: true,
+                ),
+              ),
+              const SizedBox(width: 12),
+              Expanded(child: _buildTypeSelector(context, 'Wi-Fi', Icons.wifi)),
+              const SizedBox(width: 12),
+              Expanded(
+                child: _buildTypeSelector(context, 'Text', Icons.text_fields),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: _buildTypeSelector(context, 'VCard', Icons.contact_page),
+              ),
+            ],
+          ),
+
+          const SizedBox(height: 20),
+
+          // Generate Button
+          SizedBox(
+            width: double.infinity,
+            height: 56,
+            child: ElevatedButton(
+              onPressed: () {},
+              style: ElevatedButton.styleFrom(
+                backgroundColor: isDark ? Colors.white : Colors.black,
+                foregroundColor: isDark ? Colors.black : Colors.white,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                elevation: isDark ? 0 : 4,
+                shadowColor: Colors.black.withOpacity(0.5),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: const [
+                  Text(
+                    'Generate QR',
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  ),
+                  SizedBox(width: 8),
+                  Icon(Icons.arrow_forward, size: 16),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildTypeSelector(
+    BuildContext context,
+    String label,
+    IconData icon, {
+    bool isSelected = false,
+  }) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
+    Color bgColor;
+    Color iconColor;
+
+    if (isSelected) {
+      bgColor = isDark ? Colors.white : Theme.of(context).primaryColor;
+      iconColor = isDark ? Colors.black : Colors.white;
+    } else {
+      bgColor = isDark ? Colors.grey[800]! : Colors.grey[50]!;
+      iconColor = isDark ? Colors.grey[300]! : Colors.grey[600]!;
+    }
+
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 12),
+      decoration: BoxDecoration(
+        color: bgColor,
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: isSelected && !isDark
+            ? [
+                BoxShadow(
+                  color: Colors.grey.withOpacity(0.3),
+                  blurRadius: 8,
+                  offset: const Offset(0, 4),
+                ),
+              ]
+            : null,
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(icon, color: iconColor, size: 20),
+          const SizedBox(height: 4),
+          Text(
+            label,
+            style: TextStyle(
+              color: iconColor,
+              fontSize: 10,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildHistoryItem(
+    BuildContext context,
+    String title,
+    String subtitle,
+    String type,
+    String time,
+    Color tagColor,
+  ) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Theme.of(context).colorScheme.surface,
+        borderRadius: BorderRadius.circular(24),
+        boxShadow: [
+          if (!isDark)
+            BoxShadow(
+              color: Colors.black.withOpacity(0.02),
+              blurRadius: 10,
+              offset: const Offset(0, 2),
+            ),
+        ],
+      ),
+      child: Row(
+        children: [
+          Container(
+            width: 56,
+            height: 56,
+            decoration: BoxDecoration(
+              color: isDark ? Colors.white : Colors.grey[100],
+              borderRadius: BorderRadius.circular(12),
+            ),
+            padding: const EdgeInsets.all(4),
+            child: Center(
+              child: Icon(
+                Icons.qr_code,
+                color: isDark ? Colors.black : Colors.grey[600],
+              ), // Placeholder for actual QR code thumbnail
+            ),
+          ),
+          const SizedBox(width: 16),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                Text(
+                  subtitle,
+                  style: Theme.of(context).textTheme.bodySmall,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                const SizedBox(height: 4),
+                Row(
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 8,
+                        vertical: 2,
+                      ),
+                      decoration: BoxDecoration(
+                        color: tagColor.withOpacity(isDark ? 0.3 : 0.1),
+                        borderRadius: BorderRadius.circular(6),
+                      ),
+                      child: Text(
+                        type,
+                        style: TextStyle(
+                          color: isDark ? tagColor.withOpacity(0.9) : tagColor,
+                          fontSize: 10,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    Text(
+                      time,
+                      style: TextStyle(color: Colors.grey[400], fontSize: 10),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+          IconButton(
+            icon: Icon(Icons.more_vert, color: Colors.grey[400]),
+            onPressed: () {},
+          ),
+        ],
+      ),
+    );
+  }
+}

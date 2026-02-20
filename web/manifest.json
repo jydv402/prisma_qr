@@ -1,6 +1,6 @@
 {
-    "name": "prisma_qr",
-    "short_name": "prisma_qr",
+    "name": "prisma_qr_app",
+    "short_name": "prisma_qr_app",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

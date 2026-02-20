@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../controllers/bottom_nav_controller.dart';
+import '../controllers/history_controller.dart';
+import 'scan_result_bottom_sheet.dart';
+import 'package:timeago/timeago.dart' as timeago;
 
 class ScanSavedHistoryScreen extends StatefulWidget {
   const ScanSavedHistoryScreen({super.key});
@@ -174,83 +177,83 @@ class _ScanSavedHistoryScreenState extends State<ScanSavedHistoryScreen> {
   }
 
   Widget _buildScannedList(BuildContext context) {
-    return Column(
-      key: const ValueKey('scanned'),
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        _buildSectionHeader(context, 'Today'),
-        _buildHistoryListItem(
-          context,
-          'qr_code_2',
-          'Nixtio Dashboard',
-          'https://nixtio.com/dashboard/user...',
-          '9:41 AM',
-        ),
-        const SizedBox(height: 16),
-        _buildHistoryListItem(
-          context,
-          'text_fields',
-          'WiFi: Guest_Network',
-          'WPA2 • Password: ********',
-          '8:30 AM',
-        ),
-        const SizedBox(height: 32),
-
-        _buildSectionHeader(context, 'Yesterday'),
-        _buildHistoryListItem(
-          context,
-          'contact_page',
-          'Contact: John Doe',
-          'vCard • +1 (555) 0123-4567',
-          '4:15 PM',
-        ),
-        const SizedBox(height: 16),
-        _buildHistoryListItem(
-          context,
-          'shopping_cart',
-          'Product: 890123...',
-          'EAN-13 • Amazon Search',
-          '11:20 AM',
-        ),
-        const SizedBox(height: 32),
-
-        _buildSectionHeader(context, 'Older'),
-        _buildHistoryListItem(
-          context,
-          'link',
-          'Menu: Cafe Delight',
-          'http://cafedelight.com/menu_pdf',
-          'Oct 24',
-        ),
-      ],
-    );
+    final HistoryController historyController = Get.find<HistoryController>();
+    return Obx(() {
+      if (historyController.scannedHistory.isEmpty) {
+        return Column(
+          key: const ValueKey('scanned'),
+          children: const [
+            SizedBox(height: 60),
+            Center(child: Text('No scanned items yet.')),
+          ],
+        );
+      }
+      return Column(
+        key: const ValueKey('scanned'),
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: historyController.scannedHistory.map((record) {
+          return Padding(
+            padding: const EdgeInsets.only(bottom: 12),
+            child: GestureDetector(
+              onTap: () {
+                Get.bottomSheet(
+                  ScanResultBottomSheet(record: record),
+                  isScrollControlled: true,
+                  backgroundColor: Colors.transparent,
+                );
+              },
+              child: _buildHistoryListItem(
+                context,
+                record.iconName,
+                record.format,
+                record.data,
+                timeago.format(record.timestamp),
+              ),
+            ),
+          );
+        }).toList(),
+      );
+    });
   }
 
   Widget _buildSavedList(BuildContext context) {
-    return Column(
-      key: const ValueKey('saved'),
-      children: const [
-        // Placeholder for saved items
-        SizedBox(height: 60),
-        Center(child: Text('No saved items yet.')),
-      ],
-    );
-  }
-
-  Widget _buildSectionHeader(BuildContext context, String title) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-    return Padding(
-      padding: const EdgeInsets.only(left: 4, bottom: 16),
-      child: Text(
-        title.toUpperCase(),
-        style: TextStyle(
-          color: isDark ? Colors.grey[500] : Colors.grey[600],
-          fontSize: 12,
-          fontWeight: FontWeight.w700,
-          letterSpacing: 1.0,
-        ),
-      ),
-    );
+    final HistoryController historyController = Get.find<HistoryController>();
+    return Obx(() {
+      if (historyController.generatedHistory.isEmpty) {
+        return Column(
+          key: const ValueKey('saved'),
+          children: const [
+            SizedBox(height: 60),
+            Center(child: Text('No saved items yet.')),
+          ],
+        );
+      }
+      return Column(
+        key: const ValueKey('saved'),
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: historyController.generatedHistory.map((record) {
+          return Padding(
+            padding: const EdgeInsets.only(bottom: 12),
+            child: GestureDetector(
+              onTap: () {
+                Get.bottomSheet(
+                  ScanResultBottomSheet(record: record),
+                  isScrollControlled: true,
+                  backgroundColor: Colors.transparent,
+                );
+              },
+              child: _buildHistoryListItem(
+                context,
+                record.iconName,
+                record.format,
+                record.data,
+                timeago.format(record.timestamp),
+              ),
+            ),
+          );
+        }).toList(),
+      );
+    });
   }
 
   Widget _buildHistoryListItem(
@@ -281,7 +284,7 @@ class _ScanSavedHistoryScreenState extends State<ScanSavedHistoryScreen> {
         icon = Icons.link;
         break;
       default:
-        icon = Icons.error;
+        icon = Icons.qr_code_2;
     }
 
     return Container(
@@ -360,6 +363,3 @@ class _ScanSavedHistoryScreenState extends State<ScanSavedHistoryScreen> {
     );
   }
 }
-
-// NOTE: This uses GetX controller to navigate back to Scanner but since MainScreen manages index, that requires an import.
-// I will import it conditionally or use Get.find. Included in code above.

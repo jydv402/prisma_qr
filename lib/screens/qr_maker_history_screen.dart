@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'settings_screen.dart';
+import '../controllers/qr_maker_controller.dart';
+import '../controllers/history_controller.dart';
+import 'scan_result_bottom_sheet.dart';
+import 'package:timeago/timeago.dart' as timeago;
 
 class QrMakerHistoryScreen extends StatelessWidget {
   const QrMakerHistoryScreen({super.key});
@@ -9,6 +13,9 @@ class QrMakerHistoryScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final bgColor = Theme.of(context).scaffoldBackgroundColor;
+
+    final QrMakerController makerController = Get.put(QrMakerController());
+    final HistoryController historyController = Get.find<HistoryController>();
 
     return Scaffold(
       backgroundColor: bgColor,
@@ -74,7 +81,7 @@ class QrMakerHistoryScreen extends StatelessWidget {
                 ),
                 children: [
                   // 2. New Code Card
-                  _buildNewCodeCard(context),
+                  _buildNewCodeCard(context, makerController),
 
                   const SizedBox(height: 16),
 
@@ -105,32 +112,46 @@ class QrMakerHistoryScreen extends StatelessWidget {
                   const SizedBox(height: 8),
 
                   // History List Items
-                  _buildHistoryItem(
-                    context,
-                    'Portfolio Link',
-                    'https://nixtio.design/portfolio',
-                    'URL',
-                    '10:42 AM',
-                    Colors.blue,
-                  ),
-                  const SizedBox(height: 12),
-                  _buildHistoryItem(
-                    context,
-                    'Guest Wi-Fi',
-                    'WPA: Home_Network_5G',
-                    'Wi-Fi',
-                    'Yesterday',
-                    Colors.purple,
-                  ),
-                  const SizedBox(height: 12),
-                  _buildHistoryItem(
-                    context,
-                    'Business Card',
-                    'John Doe - Product Designer',
-                    'Contact',
-                    'Mon 26th',
-                    Colors.green,
-                  ),
+                  Obx(() {
+                    if (historyController.generatedHistory.isEmpty) {
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 32),
+                        child: Center(
+                          child: Text(
+                            'No generated QR codes yet.',
+                            style: TextStyle(color: Colors.grey[500]),
+                          ),
+                        ),
+                      );
+                    }
+
+                    return Column(
+                      children: historyController.generatedHistory.map((
+                        record,
+                      ) {
+                        return Padding(
+                          padding: const EdgeInsets.only(bottom: 12),
+                          child: GestureDetector(
+                            onTap: () {
+                              Get.bottomSheet(
+                                ScanResultBottomSheet(record: record),
+                                isScrollControlled: true,
+                                backgroundColor: Colors.transparent,
+                              );
+                            },
+                            child: _buildHistoryItem(
+                              context,
+                              record.data, // using data as title for now
+                              record.type,
+                              record.format,
+                              timeago.format(record.timestamp),
+                              Colors.blue, // Dynamic colors can be added later
+                            ),
+                          ),
+                        );
+                      }).toList(),
+                    );
+                  }),
                 ],
               ),
             ),
@@ -140,7 +161,7 @@ class QrMakerHistoryScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildNewCodeCard(BuildContext context) {
+  Widget _buildNewCodeCard(BuildContext context, QrMakerController controller) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Container(
@@ -193,6 +214,7 @@ class QrMakerHistoryScreen extends StatelessWidget {
               borderRadius: BorderRadius.circular(16),
             ),
             child: TextField(
+              controller: controller.textController,
               decoration: InputDecoration(
                 icon: Icon(Icons.link, color: Colors.grey[400]),
                 hintText: 'Enter website URL or text',
@@ -205,27 +227,50 @@ class QrMakerHistoryScreen extends StatelessWidget {
           const SizedBox(height: 16),
 
           // Type Selectors
-          Row(
-            children: [
-              Expanded(
-                child: _buildTypeSelector(
-                  context,
-                  'URL',
-                  Icons.link,
-                  isSelected: true,
+          Obx(
+            () => Row(
+              children: [
+                Expanded(
+                  child: _buildTypeSelector(
+                    context,
+                    'URL',
+                    Icons.link,
+                    isSelected: controller.selectedType.value == 'URL',
+                    onTap: () => controller.setType('URL'),
+                  ),
                 ),
-              ),
-              const SizedBox(width: 12),
-              Expanded(child: _buildTypeSelector(context, 'Wi-Fi', Icons.wifi)),
-              const SizedBox(width: 12),
-              Expanded(
-                child: _buildTypeSelector(context, 'Text', Icons.text_fields),
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: _buildTypeSelector(context, 'VCard', Icons.contact_page),
-              ),
-            ],
+                const SizedBox(width: 12),
+                Expanded(
+                  child: _buildTypeSelector(
+                    context,
+                    'Wi-Fi',
+                    Icons.wifi,
+                    isSelected: controller.selectedType.value == 'Wi-Fi',
+                    onTap: () => controller.setType('Wi-Fi'),
+                  ),
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: _buildTypeSelector(
+                    context,
+                    'Text',
+                    Icons.text_fields,
+                    isSelected: controller.selectedType.value == 'Text',
+                    onTap: () => controller.setType('Text'),
+                  ),
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: _buildTypeSelector(
+                    context,
+                    'VCard',
+                    Icons.contact_page,
+                    isSelected: controller.selectedType.value == 'VCard',
+                    onTap: () => controller.setType('VCard'),
+                  ),
+                ),
+              ],
+            ),
           ),
 
           const SizedBox(height: 20),
@@ -234,27 +279,34 @@ class QrMakerHistoryScreen extends StatelessWidget {
           SizedBox(
             width: double.infinity,
             height: 56,
-            child: ElevatedButton(
-              onPressed: () {},
-              style: ElevatedButton.styleFrom(
-                backgroundColor: isDark ? Colors.white : Colors.black,
-                foregroundColor: isDark ? Colors.black : Colors.white,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(16),
-                ),
-                elevation: isDark ? 0 : 4,
-                shadowColor: Colors.black.withOpacity(0.5),
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: const [
-                  Text(
-                    'Generate QR',
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            child: Obx(
+              () => ElevatedButton(
+                onPressed: controller.isGenerating.value
+                    ? null
+                    : () => controller.generateQrCode(),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: isDark ? Colors.white : Colors.black,
+                  foregroundColor: isDark ? Colors.black : Colors.white,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16),
                   ),
-                  SizedBox(width: 8),
-                  Icon(Icons.arrow_forward, size: 16),
-                ],
+                  elevation: isDark ? 0 : 4,
+                  shadowColor: Colors.black.withOpacity(0.5),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: const [
+                    Text(
+                      'Generate QR',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    SizedBox(width: 8),
+                    Icon(Icons.arrow_forward, size: 16),
+                  ],
+                ),
               ),
             ),
           ),
@@ -268,6 +320,7 @@ class QrMakerHistoryScreen extends StatelessWidget {
     String label,
     IconData icon, {
     bool isSelected = false,
+    required VoidCallback onTap,
   }) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
@@ -282,35 +335,38 @@ class QrMakerHistoryScreen extends StatelessWidget {
       iconColor = isDark ? Colors.grey[300]! : Colors.grey[600]!;
     }
 
-    return Container(
-      padding: const EdgeInsets.symmetric(vertical: 12),
-      decoration: BoxDecoration(
-        color: bgColor,
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: isSelected && !isDark
-            ? [
-                BoxShadow(
-                  color: Colors.grey.withOpacity(0.3),
-                  blurRadius: 8,
-                  offset: const Offset(0, 4),
-                ),
-              ]
-            : null,
-      ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(icon, color: iconColor, size: 20),
-          const SizedBox(height: 4),
-          Text(
-            label,
-            style: TextStyle(
-              color: iconColor,
-              fontSize: 10,
-              fontWeight: FontWeight.w500,
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 12),
+        decoration: BoxDecoration(
+          color: bgColor,
+          borderRadius: BorderRadius.circular(16),
+          boxShadow: isSelected && !isDark
+              ? [
+                  BoxShadow(
+                    color: Colors.grey.withOpacity(0.3),
+                    blurRadius: 8,
+                    offset: const Offset(0, 4),
+                  ),
+                ]
+              : null,
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(icon, color: iconColor, size: 20),
+            const SizedBox(height: 4),
+            Text(
+              label,
+              style: TextStyle(
+                color: iconColor,
+                fontSize: 10,
+                fontWeight: FontWeight.w500,
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

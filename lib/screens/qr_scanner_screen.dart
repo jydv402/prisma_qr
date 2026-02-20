@@ -1,26 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:mobile_scanner/mobile_scanner.dart';
 import 'settings_screen.dart';
+import '../controllers/qr_scanner_controller.dart';
 
 class QrScannerScreen extends StatelessWidget {
   const QrScannerScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    // Instantiate the scanner controller that will be active while this screen is built
+    final QrScannerController controller = Get.put(QrScannerController());
+
     return Scaffold(
       backgroundColor: Colors.black, // Dark background for camera
       body: Stack(
         children: [
-          // 1. Placeholder for Camera View
+          // 1. Camera View
           Positioned.fill(
-            child: Container(
-              color: Colors.black.withOpacity(0.8), // Simulated camera darkness
-              child: const Center(
-                child: Text(
-                  'Camera Feed Here',
-                  style: TextStyle(color: Colors.white54),
-                ),
-              ),
+            child: MobileScanner(
+              controller: controller.mobileController,
+              onDetect: controller.handleBarcode,
             ),
           ),
 
@@ -91,16 +91,21 @@ class QrScannerScreen extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    _buildActionButton(
-                      icon: Icons.flash_on,
-                      label: 'Flash',
-                      onTap: () {},
+                    Obx(
+                      () => _buildActionButton(
+                        icon: controller.isTorchOn.value
+                            ? Icons.flash_off
+                            : Icons.flash_on,
+                        label: 'Flash',
+                        onTap: () => controller.toggleTorch(),
+                      ),
                     ),
                     const SizedBox(width: 32),
                     _buildActionButton(
                       icon: Icons.image,
                       label: 'Gallery',
-                      onTap: () {},
+                      onTap:
+                          () {}, // Gallery scanning to be implemented if needed
                     ),
                   ],
                 ),

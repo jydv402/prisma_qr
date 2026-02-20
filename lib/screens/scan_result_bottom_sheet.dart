@@ -1,7 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:share_plus/share_plus.dart';
+import 'package:get/get.dart';
+import '../models/qr_code_model.dart';
+import 'package:timeago/timeago.dart' as timeago;
 
 class ScanResultBottomSheet extends StatelessWidget {
-  const ScanResultBottomSheet({super.key});
+  final QrCodeRecord record;
+  const ScanResultBottomSheet({super.key, required this.record});
 
   @override
   Widget build(BuildContext context) {
@@ -61,7 +68,7 @@ class ScanResultBottomSheet extends StatelessWidget {
                               borderRadius: BorderRadius.circular(6),
                             ),
                             child: Text(
-                              'WEBSITE',
+                              record.format.toUpperCase(),
                               style: TextStyle(
                                 color: isDark
                                     ? Colors.green[400]
@@ -74,7 +81,7 @@ class ScanResultBottomSheet extends StatelessWidget {
                           ),
                           const SizedBox(width: 8),
                           Text(
-                            'Just now',
+                            timeago.format(record.timestamp),
                             style: TextStyle(
                               color: isDark
                                   ? Colors.grey[500]
@@ -86,7 +93,9 @@ class ScanResultBottomSheet extends StatelessWidget {
                       ),
                       const SizedBox(height: 8),
                       Text(
-                        'Product Page',
+                        record.type == 'scan'
+                            ? 'Scanned Result'
+                            : 'Generated Code',
                         style: Theme.of(context).textTheme.headlineMedium
                             ?.copyWith(fontWeight: FontWeight.bold),
                       ),
@@ -132,8 +141,8 @@ class ScanResultBottomSheet extends StatelessWidget {
                         color: Colors.blue.withOpacity(isDark ? 0.3 : 0.1),
                         shape: BoxShape.circle,
                       ),
-                      child: const Icon(
-                        Icons.link,
+                      child: Icon(
+                        _getIconForFormat(record.format),
                         color: Colors.blue,
                         size: 20,
                       ),
@@ -144,13 +153,15 @@ class ScanResultBottomSheet extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'https://store.google.com/product/pixel_8',
+                            record.data,
                             style: const TextStyle(fontWeight: FontWeight.w500),
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                           ),
                           Text(
-                            'Secure Connection • Verified',
+                            record.format == 'URL'
+                                ? 'Tap open below to visit'
+                                : 'Raw Data',
                             style: TextStyle(
                               color: isDark
                                   ? Colors.grey[400]
@@ -201,7 +212,19 @@ class ScanResultBottomSheet extends StatelessWidget {
                 width: double.infinity,
                 height: 56,
                 child: ElevatedButton(
-                  onPressed: () {},
+                  onPressed: record.format == 'URL'
+                      ? () async {
+                          final uri = Uri.parse(record.data);
+                          if (await canLaunchUrl(uri)) {
+                            await launchUrl(
+                              uri,
+                              mode: LaunchMode.externalApplication,
+                            );
+                          } else {
+                            Get.snackbar('Error', 'Could not open URL');
+                          }
+                        }
+                      : null,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: isDark ? Colors.white : Colors.black,
                     foregroundColor: isDark ? Colors.black : Colors.white,
@@ -212,9 +235,11 @@ class ScanResultBottomSheet extends StatelessWidget {
                   ),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children: const [
+                    children: [
                       Text(
-                        'Open in Browser',
+                        record.format == 'URL'
+                            ? 'Open in Browser'
+                            : 'Cannot Open Link',
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
@@ -234,7 +259,12 @@ class ScanResultBottomSheet extends StatelessWidget {
                       context,
                       icon: Icons.share,
                       label: 'Share',
-                      onTap: () {},
+                      onTap: () {
+                        Share.share(
+                          record.data,
+                          subject: 'Shared via Prisma QR',
+                        );
+                      },
                     ),
                   ),
                   const SizedBox(width: 12),
@@ -243,7 +273,14 @@ class ScanResultBottomSheet extends StatelessWidget {
                       context,
                       icon: Icons.content_copy,
                       label: 'Copy',
-                      onTap: () {},
+                      onTap: () {
+                        Clipboard.setData(ClipboardData(text: record.data));
+                        Get.snackbar(
+                          'Copied',
+                          'Data copied to clipboard',
+                          snackPosition: SnackPosition.BOTTOM,
+                        );
+                      },
                     ),
                   ),
                 ],
@@ -319,14 +356,18 @@ class ScanResultBottomSheet extends StatelessWidget {
       ),
     );
   }
-}
 
-// Function to easily show this bottom sheet anywhere
-void showScanResultBottomSheet(BuildContext context) {
-  showModalBottomSheet(
-    context: context,
-    isScrollControlled: true,
-    backgroundColor: Colors.transparent,
-    builder: (context) => const ScanResultBottomSheet(),
-  );
+  IconData _getIconForFormat(String format) {
+    switch (format.toLowerCase()) {
+      case 'url':
+        return Icons.link;
+      case 'wi-fi':
+        return Icons.wifi;
+      case 'contact':
+        return Icons.contact_page;
+      case 'text':
+      default:
+        return Icons.text_fields;
+    }
+  }
 }

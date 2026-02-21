@@ -1,11 +1,11 @@
 {
-    "name": "prisma_qr_app",
-    "short_name": "prisma_qr_app",
+    "name": "Prisma QR",
+    "short_name": "Prisma QR",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
     "theme_color": "#0175C2",
-    "description": "A new Flutter project.",
+    "description": "QR Code Scanner & Generator",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [

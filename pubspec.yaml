@@ -23,6 +23,36 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^6.0.0
+  package_rename: ^1.10.1
 
 flutter:
   uses-material-design: true
+
+package_rename_config:
+  android:
+    app_name: "Prisma QR" # Display name
+    package_name: "com.jdmakes.prisma_qr" # Package name
+
+  ios:
+    app_name: "Prisma QR" # Display name
+    bundle_name: "Prisma QR" # Bundle name
+    package_name: "com.jdmakes.prisma_qr" # Product Bundle Identifier
+
+  linux:
+    app_name: "Prisma QR" # Window title
+    package_name: "com.jdmakes.prisma_qr" # Application ID
+    exe_name: "prisma_qr" # Executable name (binary)
+
+  macos:
+    app_name: "Prisma QR" # Product name
+    package_name: "com.jdmakes.prisma_qr" # Product Bundle Identifier
+
+  web:
+    app_name: "Prisma QR" # App title & PWA name
+    short_app_name: "Prisma QR" # PWA short name (defaults to app_name)
+    description: "QR Code Scanner & Generator" # Web app description
+
+  windows:
+    app_name: "Prisma QR" # Window title & Software name
+    organization: "JD Makes" # Organization/Company name
+    exe_name: "prisma_qr" # Executable name (binary)

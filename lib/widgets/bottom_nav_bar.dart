@@ -7,8 +7,10 @@ class BottomNavBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Get the bottom navigation controller
     final BottomNavController controller = Get.find();
-    final isDark = Theme.of(context).brightness == Brightness.dark;
+    // Check if the current theme is dark
+    final bool isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Center(
       child: Container(
@@ -18,14 +20,20 @@ class BottomNavBar extends StatelessWidget {
           borderRadius: BorderRadius.circular(32.0),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.05),
+              color: Colors.black.withValues(alpha: 0.05),
               blurRadius: 20,
               offset: const Offset(0, 10),
             ),
             if (!isDark)
-              BoxShadow(color: Colors.black.withOpacity(0.05), spreadRadius: 1),
+              BoxShadow(
+                color: Colors.black.withValues(alpha: 0.05),
+                spreadRadius: 1,
+              ),
             if (isDark)
-              BoxShadow(color: Colors.white.withOpacity(0.05), spreadRadius: 1),
+              BoxShadow(
+                color: Colors.white.withValues(alpha: 0.05),
+                spreadRadius: 1,
+              ),
           ],
         ),
         child: Obx(

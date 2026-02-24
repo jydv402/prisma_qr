@@ -26,7 +26,7 @@ class QrScannerScreen extends StatelessWidget {
 
           // Background dimming around the scanner hole (simulated here via a gradient/color overlay)
           Positioned.fill(
-            child: Container(color: Colors.black.withOpacity(0.4)),
+            child: Container(color: Colors.black.withValues(alpha: 0.4)),
           ),
 
           // 2. Top Bar (Title and Options)
@@ -62,7 +62,7 @@ class QrScannerScreen extends StatelessWidget {
                   width: 40,
                   height: 40,
                   decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.2),
+                    color: Colors.white.withValues(alpha: 0.2),
                     shape: BoxShape.circle,
                   ),
                   child: IconButton(
@@ -130,11 +130,14 @@ class QrScannerScreen extends StatelessWidget {
       width: 250,
       height: 250,
       decoration: BoxDecoration(
-        border: Border.all(color: Colors.white.withOpacity(0.8), width: 3),
+        border: Border.all(
+          color: Colors.white.withValues(alpha: 0.8),
+          width: 3,
+        ),
         borderRadius: BorderRadius.circular(32),
         boxShadow: [
           BoxShadow(
-            color: Colors.white.withOpacity(0.1),
+            color: Colors.white.withValues(alpha: 0.1),
             blurRadius: 20,
             spreadRadius: 5,
           ),
@@ -156,10 +159,10 @@ class QrScannerScreen extends StatelessWidget {
             child: Container(
               height: 4,
               decoration: BoxDecoration(
-                color: Colors.white.withOpacity(0.8),
+                color: Colors.white.withValues(alpha: 0.8),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.white.withOpacity(0.8),
+                    color: Colors.white.withValues(alpha: 0.8),
                     blurRadius: 15,
                   ),
                 ],
@@ -220,9 +223,9 @@ class QrScannerScreen extends StatelessWidget {
             width: 56,
             height: 56,
             decoration: BoxDecoration(
-              color: Colors.white.withOpacity(0.1),
+              color: Colors.white.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(16),
-              border: Border.all(color: Colors.white.withOpacity(0.1)),
+              border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
             ),
             child: Icon(icon, color: Colors.white),
           ),
@@ -246,11 +249,11 @@ class QrScannerScreen extends StatelessWidget {
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: isDark
-            ? const Color(0xFF1C1C1E).withOpacity(0.9)
-            : Colors.white.withOpacity(0.9),
+            ? const Color(0xFF1C1C1E).withValues(alpha: 0.9)
+            : Colors.white.withValues(alpha: 0.9),
         borderRadius: BorderRadius.circular(24),
         border: Border.all(
-          color: isDark ? Colors.white10 : Colors.black.withOpacity(0.05),
+          color: isDark ? Colors.white10 : Colors.black.withValues(alpha: 0.05),
         ),
       ),
       child: Row(
@@ -259,7 +262,7 @@ class QrScannerScreen extends StatelessWidget {
             width: 40,
             height: 40,
             decoration: BoxDecoration(
-              color: Colors.blue.withOpacity(isDark ? 0.3 : 0.1),
+              color: Colors.blue.withValues(alpha: isDark ? 0.3 : 0.1),
               shape: BoxShape.circle,
             ),
             child: const Icon(Icons.link, color: Colors.blue, size: 20),

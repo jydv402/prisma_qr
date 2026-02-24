@@ -1,20 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import '../controllers/settings_controller.dart';
 
-class SettingsScreen extends StatefulWidget {
+class SettingsScreen extends StatelessWidget {
   const SettingsScreen({super.key});
 
   @override
-  State<SettingsScreen> createState() => _SettingsScreenState();
-}
-
-class _SettingsScreenState extends State<SettingsScreen> {
-  bool _vibrateOnScan = true;
-  bool _beepOnScan = false;
-  bool _autoCopy = true;
-
-  @override
   Widget build(BuildContext context) {
+    final SettingsController settingsController =
+        Get.find<SettingsController>();
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final bgColor = Theme.of(context).scaffoldBackgroundColor;
 
@@ -58,7 +52,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     boxShadow: [
                       if (!isDark)
                         BoxShadow(
-                          color: Colors.black.withOpacity(0.05),
+                          color: Colors.black.withValues(alpha: 0.05),
                           blurRadius: 20,
                           offset: const Offset(0, 4),
                         ),
@@ -109,7 +103,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               boxShadow: [
                 if (!isDark)
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.02),
+                    color: Colors.black.withValues(alpha: 0.02),
                     blurRadius: 10,
                     offset: const Offset(0, 2),
                   ),
@@ -117,28 +111,36 @@ class _SettingsScreenState extends State<SettingsScreen> {
             ),
             child: Column(
               children: [
-                _buildToggleRow(
-                  context,
-                  icon: Icons.vibration,
-                  label: 'Vibrate on Scan',
-                  value: _vibrateOnScan,
-                  onChanged: (val) => setState(() => _vibrateOnScan = val),
+                Obx(
+                  () => _buildToggleRow(
+                    context,
+                    icon: Icons.vibration,
+                    label: 'Vibrate on Scan',
+                    value: settingsController.hapticFeedback.value,
+                    onChanged: (val) =>
+                        settingsController.toggleHapticFeedback(val),
+                  ),
                 ),
                 _buildDivider(context),
-                _buildToggleRow(
-                  context,
-                  icon: Icons.volume_up,
-                  label: 'Beep on Scan',
-                  value: _beepOnScan,
-                  onChanged: (val) => setState(() => _beepOnScan = val),
+                Obx(
+                  () => _buildToggleRow(
+                    context,
+                    icon: Icons.volume_up,
+                    label: 'Beep on Scan',
+                    value: settingsController.scanSounds.value,
+                    onChanged: (val) =>
+                        settingsController.toggleScanSounds(val),
+                  ),
                 ),
                 _buildDivider(context),
-                _buildToggleRow(
-                  context,
-                  icon: Icons.content_copy,
-                  label: 'Auto-Copy to Clipboard',
-                  value: _autoCopy,
-                  onChanged: (val) => setState(() => _autoCopy = val),
+                Obx(
+                  () => _buildToggleRow(
+                    context,
+                    icon: Icons.content_copy,
+                    label: 'Auto-Copy to Clipboard',
+                    value: settingsController.autoCopy.value,
+                    onChanged: (val) => settingsController.toggleAutoCopy(val),
+                  ),
                 ),
               ],
             ),
@@ -155,7 +157,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               boxShadow: [
                 if (!isDark)
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.02),
+                    color: Colors.black.withValues(alpha: 0.02),
                     blurRadius: 10,
                     offset: const Offset(0, 2),
                   ),
@@ -163,17 +165,20 @@ class _SettingsScreenState extends State<SettingsScreen> {
             ),
             child: Column(
               children: [
-                _buildNavigationRow(
-                  context,
-                  icon: Icons.dark_mode,
-                  label: 'Theme',
-                  valueText: Get.isDarkMode ? 'Dark' : 'System',
-                  onTap: () {
-                    // Simple logic to toggle for showcase
-                    Get.changeThemeMode(
-                      Get.isDarkMode ? ThemeMode.light : ThemeMode.dark,
-                    );
-                  },
+                Obx(
+                  () => _buildNavigationRow(
+                    context,
+                    icon: Icons.dark_mode,
+                    label: 'Theme',
+                    valueText: settingsController.isDarkMode.value
+                        ? 'Dark'
+                        : 'Light',
+                    onTap: () {
+                      settingsController.toggleTheme(
+                        !settingsController.isDarkMode.value,
+                      );
+                    },
+                  ),
                 ),
                 _buildDivider(context),
                 _buildNavigationRow(
@@ -283,8 +288,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
               context,
             ).colorScheme.primary, // Black in light mode, primary in dark
             activeTrackColor: isDark
-                ? Theme.of(context).colorScheme.primary.withOpacity(0.5)
-                : Colors.black.withOpacity(0.2),
+                ? Theme.of(context).colorScheme.primary.withValues(alpha: 0.5)
+                : Colors.black.withValues(alpha: 0.2),
           ),
         ],
       ),

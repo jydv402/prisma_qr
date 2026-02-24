@@ -4,12 +4,19 @@ import 'package:google_fonts/google_fonts.dart';
 class AppTheme {
   // Common Colors
   static const Color primaryLight = Color(0xFF18181B); // Zinc 900
-  static const Color primaryDark = Color(0xFF000000); // Or #111827 depending on screen
+  static const Color primaryDark = Color(
+    0xFF000000,
+  ); // Or #111827 depending on screen
   static const Color accentBlue = Color(0xFF3B82F6);
-  
+
   // Backgrounds
-  static const Color bgLight = Color(0xFFF2F2F7); // iOS system gray light or F2F2F4
-  static const Color bgDark = Color(0xFF111111); // Deep dark
+  static const Color bgLight = Color.fromARGB(
+    255,
+    239,
+    241,
+    238,
+  ); // iOS system gray light or F2F2F4
+  static const Color bgDark = Color.fromARGB(255, 0, 0, 0); // Pitch black
 
   // Cards
   static const Color cardLight = Color(0xFFFFFFFF);
@@ -30,24 +37,59 @@ class AppTheme {
         primary: primaryLight,
         secondary: accentBlue,
         surface: cardLight,
-        background: bgLight,
       ),
       textTheme: TextTheme(
-        displayLarge: GoogleFonts.dmSans(color: textMainLight, fontWeight: FontWeight.bold),
-        displayMedium: GoogleFonts.dmSans(color: textMainLight, fontWeight: FontWeight.bold),
-        displaySmall: GoogleFonts.dmSans(color: textMainLight, fontWeight: FontWeight.bold),
-        headlineLarge: GoogleFonts.dmSans(color: textMainLight, fontWeight: FontWeight.bold),
-        headlineMedium: GoogleFonts.dmSans(color: textMainLight, fontWeight: FontWeight.bold),
-        headlineSmall: GoogleFonts.dmSans(color: textMainLight, fontWeight: FontWeight.bold),
-        titleLarge: GoogleFonts.dmSans(color: textMainLight, fontWeight: FontWeight.bold),
-        titleMedium: GoogleFonts.dmSans(color: textMainLight, fontWeight: FontWeight.bold),
-        titleSmall: GoogleFonts.dmSans(color: textMainLight, fontWeight: FontWeight.bold),
+        displayLarge: GoogleFonts.dmSans(
+          color: textMainLight,
+          fontWeight: FontWeight.bold,
+        ),
+        displayMedium: GoogleFonts.dmSans(
+          color: textMainLight,
+          fontWeight: FontWeight.bold,
+        ),
+        displaySmall: GoogleFonts.dmSans(
+          color: textMainLight,
+          fontWeight: FontWeight.bold,
+        ),
+        headlineLarge: GoogleFonts.dmSans(
+          color: textMainLight,
+          fontWeight: FontWeight.bold,
+        ),
+        headlineMedium: GoogleFonts.dmSans(
+          color: textMainLight,
+          fontWeight: FontWeight.bold,
+        ),
+        headlineSmall: GoogleFonts.dmSans(
+          color: textMainLight,
+          fontWeight: FontWeight.bold,
+        ),
+        titleLarge: GoogleFonts.dmSans(
+          color: textMainLight,
+          fontWeight: FontWeight.bold,
+        ),
+        titleMedium: GoogleFonts.dmSans(
+          color: textMainLight,
+          fontWeight: FontWeight.bold,
+        ),
+        titleSmall: GoogleFonts.dmSans(
+          color: textMainLight,
+          fontWeight: FontWeight.bold,
+        ),
         bodyLarge: GoogleFonts.inter(color: textMainLight),
         bodyMedium: GoogleFonts.inter(color: textMainLight),
         bodySmall: GoogleFonts.inter(color: textSubLight),
-        labelLarge: GoogleFonts.inter(color: textMainLight, fontWeight: FontWeight.w600),
-        labelMedium: GoogleFonts.inter(color: textMainLight, fontWeight: FontWeight.w500),
-        labelSmall: GoogleFonts.inter(color: textSubLight, fontWeight: FontWeight.w500),
+        labelLarge: GoogleFonts.inter(
+          color: textMainLight,
+          fontWeight: FontWeight.w600,
+        ),
+        labelMedium: GoogleFonts.inter(
+          color: textMainLight,
+          fontWeight: FontWeight.w500,
+        ),
+        labelSmall: GoogleFonts.inter(
+          color: textSubLight,
+          fontWeight: FontWeight.w500,
+        ),
       ),
       useMaterial3: true,
     );
@@ -62,24 +104,59 @@ class AppTheme {
         primary: primaryDark,
         secondary: accentBlue,
         surface: cardDark,
-        background: bgDark,
       ),
       textTheme: TextTheme(
-        displayLarge: GoogleFonts.dmSans(color: textMainDark, fontWeight: FontWeight.bold),
-        displayMedium: GoogleFonts.dmSans(color: textMainDark, fontWeight: FontWeight.bold),
-        displaySmall: GoogleFonts.dmSans(color: textMainDark, fontWeight: FontWeight.bold),
-        headlineLarge: GoogleFonts.dmSans(color: textMainDark, fontWeight: FontWeight.bold),
-        headlineMedium: GoogleFonts.dmSans(color: textMainDark, fontWeight: FontWeight.bold),
-        headlineSmall: GoogleFonts.dmSans(color: textMainDark, fontWeight: FontWeight.bold),
-        titleLarge: GoogleFonts.dmSans(color: textMainDark, fontWeight: FontWeight.bold),
-        titleMedium: GoogleFonts.dmSans(color: textMainDark, fontWeight: FontWeight.bold),
-        titleSmall: GoogleFonts.dmSans(color: textMainDark, fontWeight: FontWeight.bold),
+        displayLarge: GoogleFonts.dmSans(
+          color: textMainDark,
+          fontWeight: FontWeight.bold,
+        ),
+        displayMedium: GoogleFonts.dmSans(
+          color: textMainDark,
+          fontWeight: FontWeight.bold,
+        ),
+        displaySmall: GoogleFonts.dmSans(
+          color: textMainDark,
+          fontWeight: FontWeight.bold,
+        ),
+        headlineLarge: GoogleFonts.dmSans(
+          color: textMainDark,
+          fontWeight: FontWeight.bold,
+        ),
+        headlineMedium: GoogleFonts.dmSans(
+          color: textMainDark,
+          fontWeight: FontWeight.bold,
+        ),
+        headlineSmall: GoogleFonts.dmSans(
+          color: textMainDark,
+          fontWeight: FontWeight.bold,
+        ),
+        titleLarge: GoogleFonts.dmSans(
+          color: textMainDark,
+          fontWeight: FontWeight.bold,
+        ),
+        titleMedium: GoogleFonts.dmSans(
+          color: textMainDark,
+          fontWeight: FontWeight.bold,
+        ),
+        titleSmall: GoogleFonts.dmSans(
+          color: textMainDark,
+          fontWeight: FontWeight.bold,
+        ),
         bodyLarge: GoogleFonts.inter(color: textMainDark),
         bodyMedium: GoogleFonts.inter(color: textMainDark),
         bodySmall: GoogleFonts.inter(color: textSubDark),
-        labelLarge: GoogleFonts.inter(color: textMainDark, fontWeight: FontWeight.w600),
-        labelMedium: GoogleFonts.inter(color: textMainDark, fontWeight: FontWeight.w500),
-        labelSmall: GoogleFonts.inter(color: textSubDark, fontWeight: FontWeight.w500),
+        labelLarge: GoogleFonts.inter(
+          color: textMainDark,
+          fontWeight: FontWeight.w600,
+        ),
+        labelMedium: GoogleFonts.inter(
+          color: textMainDark,
+          fontWeight: FontWeight.w500,
+        ),
+        labelSmall: GoogleFonts.inter(
+          color: textSubDark,
+          fontWeight: FontWeight.w500,
+        ),
       ),
       useMaterial3: true,
     );

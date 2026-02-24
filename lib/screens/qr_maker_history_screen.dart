@@ -33,21 +33,11 @@ class QrMakerHistoryScreen extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Good Morning,',
-                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                      Text(
-                        'QR Creator',
-                        style: Theme.of(context).textTheme.headlineMedium
-                            ?.copyWith(fontWeight: FontWeight.bold),
-                      ),
-                    ],
+                  Text(
+                    'Prisma QR',
+                    style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                   Container(
                     decoration: BoxDecoration(
@@ -172,7 +162,7 @@ class QrMakerHistoryScreen extends StatelessWidget {
         boxShadow: [
           if (!isDark)
             BoxShadow(
-              color: Colors.black.withOpacity(0.02),
+              color: Colors.black.withValues(alpha: 0.02),
               blurRadius: 10,
               offset: const Offset(0, 4),
             ),
@@ -291,7 +281,7 @@ class QrMakerHistoryScreen extends StatelessWidget {
                     borderRadius: BorderRadius.circular(16),
                   ),
                   elevation: isDark ? 0 : 4,
-                  shadowColor: Colors.black.withOpacity(0.5),
+                  shadowColor: Colors.black.withValues(alpha: 0.5),
                 ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -345,7 +335,7 @@ class QrMakerHistoryScreen extends StatelessWidget {
           boxShadow: isSelected && !isDark
               ? [
                   BoxShadow(
-                    color: Colors.grey.withOpacity(0.3),
+                    color: Colors.grey.withValues(alpha: 0.3),
                     blurRadius: 8,
                     offset: const Offset(0, 4),
                   ),
@@ -389,7 +379,7 @@ class QrMakerHistoryScreen extends StatelessWidget {
         boxShadow: [
           if (!isDark)
             BoxShadow(
-              color: Colors.black.withOpacity(0.02),
+              color: Colors.black.withValues(alpha: 0.02),
               blurRadius: 10,
               offset: const Offset(0, 2),
             ),
@@ -440,13 +430,15 @@ class QrMakerHistoryScreen extends StatelessWidget {
                         vertical: 2,
                       ),
                       decoration: BoxDecoration(
-                        color: tagColor.withOpacity(isDark ? 0.3 : 0.1),
+                        color: tagColor.withValues(alpha: isDark ? 0.3 : 0.1),
                         borderRadius: BorderRadius.circular(6),
                       ),
                       child: Text(
                         type,
                         style: TextStyle(
-                          color: isDark ? tagColor.withOpacity(0.9) : tagColor,
+                          color: isDark
+                              ? tagColor.withValues(alpha: 0.9)
+                              : tagColor,
                           fontSize: 10,
                           fontWeight: FontWeight.w600,
                         ),

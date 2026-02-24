@@ -20,7 +20,7 @@ class ScanResultBottomSheet extends StatelessWidget {
         borderRadius: const BorderRadius.vertical(top: Radius.circular(32)),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.15),
+            color: Colors.black.withValues(alpha: 0.15),
             blurRadius: 40,
             offset: const Offset(0, -10),
           ),
@@ -62,8 +62,8 @@ class ScanResultBottomSheet extends StatelessWidget {
                               vertical: 4,
                             ),
                             decoration: BoxDecoration(
-                              color: Colors.green.withOpacity(
-                                isDark ? 0.3 : 0.1,
+                              color: Colors.green.withValues(
+                                alpha: isDark ? 0.3 : 0.1,
                               ),
                               borderRadius: BorderRadius.circular(6),
                             ),
@@ -106,7 +106,7 @@ class ScanResultBottomSheet extends StatelessWidget {
                     height: 48,
                     decoration: BoxDecoration(
                       color: isDark
-                          ? Colors.grey[800]!.withOpacity(0.5)
+                          ? Colors.grey[800]!.withValues(alpha: 0.5)
                           : Colors.grey[100],
                       borderRadius: BorderRadius.circular(16),
                     ),
@@ -123,11 +123,11 @@ class ScanResultBottomSheet extends StatelessWidget {
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
                   color: isDark
-                      ? Colors.black.withOpacity(0.2)
+                      ? Colors.black.withValues(alpha: 0.2)
                       : Colors.grey[50],
                   border: Border.all(
                     color: isDark
-                        ? Colors.grey[800]!.withOpacity(0.5)
+                        ? Colors.grey[800]!.withValues(alpha: 0.5)
                         : Colors.grey[100]!,
                   ),
                   borderRadius: BorderRadius.circular(20),
@@ -138,7 +138,9 @@ class ScanResultBottomSheet extends StatelessWidget {
                       width: 40,
                       height: 40,
                       decoration: BoxDecoration(
-                        color: Colors.blue.withOpacity(isDark ? 0.3 : 0.1),
+                        color: Colors.blue.withValues(
+                          alpha: isDark ? 0.3 : 0.1,
+                        ),
                         shape: BoxShape.circle,
                       ),
                       child: Icon(
@@ -302,7 +304,9 @@ class ScanResultBottomSheet extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: isDark ? Colors.grey[800]!.withOpacity(0.5) : Colors.grey[50],
+        color: isDark
+            ? Colors.grey[800]!.withValues(alpha: 0.5)
+            : Colors.grey[50],
         borderRadius: BorderRadius.circular(16),
       ),
       child: Column(

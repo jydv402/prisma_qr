@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:prisma_qr_app/controllers/qr_maker_controller.dart';
 import 'routes/app_routes.dart';
 import 'theme/app_theme.dart';
 import 'controllers/history_controller.dart';
@@ -16,8 +17,11 @@ void main() async {
   // Initialize Settings Controller
   Get.put(SettingsController(Get.find<SettingsService>()));
 
-  // Initialize History Controller
+  // Initialize History Controllers
   Get.put(HistoryController());
+
+  // Initialize QR Maker Controller
+  Get.put(QrMakerController());
 
   runApp(const PrismaQrApp());
 }

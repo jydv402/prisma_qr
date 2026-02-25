@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
-import 'settings_screen.dart';
 import '../controllers/qr_scanner_controller.dart';
 
 class QrScannerScreen extends StatelessWidget {
@@ -100,8 +99,7 @@ class QrScannerScreen extends StatelessWidget {
                     _buildActionButton(
                       icon: Icons.image,
                       label: 'Gallery',
-                      onTap:
-                          () {}, // Gallery scanning to be implemented if needed
+                      onTap: () {},
                     ),
                   ],
                 ),

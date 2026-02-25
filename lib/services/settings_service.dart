@@ -24,8 +24,7 @@ class SettingsService {
   bool get hapticFeedback =>
       _prefs.getBool(_hapticFeedbackKey) ?? true; // Default to true
 
-  bool get autoCopy =>
-      _prefs.getBool(_autoCopyKey) ?? false; // Default to false
+  bool get autoCopy => _prefs.getBool(_autoCopyKey) ?? true; // Default to true
 
   // --- Setters ---
   Future<void> setDarkMode(bool value) async {

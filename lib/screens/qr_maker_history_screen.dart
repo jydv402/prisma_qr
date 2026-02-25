@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:prisma_qr_app/routes/app_routes.dart';
-import 'settings_screen.dart';
+import 'package:prisma_qr_app/controllers/bottom_nav_controller.dart';
 import '../controllers/qr_maker_controller.dart';
 import '../controllers/history_controller.dart';
 import 'scan_result_bottom_sheet.dart';
@@ -100,7 +99,10 @@ class QrMakerHistoryScreen extends StatelessWidget {
                         ),
                       ),
                       TextButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          // Change the index to 2 to goto history screen
+                          Get.find<BottomNavController>().changeIndex(2);
+                        },
                         child: Text(
                           'View All',
                           style: TextStyle(

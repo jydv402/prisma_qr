@@ -24,40 +24,55 @@ class _ScanSavedHistoryScreenState extends State<ScanSavedHistoryScreen> {
       backgroundColor: bgColor,
       body: SafeArea(
         child: Column(
+          crossAxisAlignment: .start,
           children: [
             // Header
             Padding(
               padding: const EdgeInsets.only(
-                left: 16,
-                right: 16,
-                top: 16,
-                bottom: 8,
+                left: 24,
+                right: 24,
+                top: 18,
+                bottom: 4,
               ),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisAlignment: .spaceBetween,
+                // Header Title
                 children: [
-                  IconButton(
-                    icon: const Icon(Icons.arrow_back),
-                    onPressed: () {
-                      // Navigate back to scanner via bottom nav
-                      final BottomNavController controller = Get.find();
-                      controller.changeIndex(1);
-                    },
-                    style: IconButton.styleFrom(
-                      backgroundColor: Theme.of(context).colorScheme.surface,
-                    ),
+                  Column(
+                    crossAxisAlignment: .start,
+                    children: [
+                      Text(
+                        'History',
+                        style: Theme.of(context).textTheme.headlineMedium
+                            ?.copyWith(fontWeight: FontWeight.bold),
+                      ),
+                      Text(
+                        'Scan and Saved history',
+                        style: TextStyle(
+                          color: Colors.white70,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ],
                   ),
-                  Text(
-                    'History',
-                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                      fontWeight: FontWeight.bold,
+                  // Settings Icon button
+                  Container(
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).colorScheme.surface,
+                      shape: BoxShape.circle,
+                      border: Border.all(
+                        color: isDark ? Colors.grey[800]! : Colors.grey[200]!,
+                      ),
                     ),
-                  ),
-                  IconButton(
-                    icon: const Icon(Icons.tune),
-                    onPressed: () {},
-                    style: IconButton.styleFrom(
-                      backgroundColor: Theme.of(context).colorScheme.surface,
+                    child: IconButton(
+                      icon: Icon(
+                        Icons.settings,
+                        color: isDark ? Colors.white : Colors.grey[800],
+                      ),
+                      onPressed: () {
+                        Get.toNamed('/settings');
+                      },
                     ),
                   ),
                 ],

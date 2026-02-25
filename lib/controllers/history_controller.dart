@@ -39,6 +39,7 @@ class HistoryController extends GetxController {
   Future<void> clearHistory() async {
     scannedHistory.clear();
     generatedHistory.clear();
+    await _historyService.clearHistory();
     await _saveCurrentState();
   }
 

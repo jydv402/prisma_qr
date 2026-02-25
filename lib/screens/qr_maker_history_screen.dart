@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:prisma_qr_app/routes/app_routes.dart';
 import 'settings_screen.dart';
 import '../controllers/qr_maker_controller.dart';
 import '../controllers/history_controller.dart';
@@ -22,22 +23,34 @@ class QrMakerHistoryScreen extends StatelessWidget {
       body: SafeArea(
         child: Column(
           children: [
-            // 1. Header
+            // Header
             Padding(
               padding: const EdgeInsets.only(
                 left: 24,
                 right: 24,
-                top: 24,
+                top: 18,
                 bottom: 8,
               ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
-                    'Prisma QR',
-                    style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
+                  Column(
+                    crossAxisAlignment: .start,
+                    children: [
+                      Text(
+                        'Prisma QR',
+                        style: Theme.of(context).textTheme.headlineMedium
+                            ?.copyWith(fontWeight: FontWeight.bold),
+                      ),
+                      Text(
+                        'Create and scan QR codes',
+                        style: TextStyle(
+                          color: Colors.white70,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ],
                   ),
                   Container(
                     decoration: BoxDecoration(
@@ -53,7 +66,7 @@ class QrMakerHistoryScreen extends StatelessWidget {
                         color: isDark ? Colors.white : Colors.grey[800],
                       ),
                       onPressed: () {
-                        Get.to(() => const SettingsScreen());
+                        Get.toNamed('/settings');
                       },
                     ),
                   ),
@@ -70,12 +83,12 @@ class QrMakerHistoryScreen extends StatelessWidget {
                   bottom: 120,
                 ),
                 children: [
-                  // 2. New Code Card
+                  // New Code Card
                   _buildNewCodeCard(context, makerController),
 
                   const SizedBox(height: 16),
 
-                  // 3. History Section
+                  // History Section
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.end,

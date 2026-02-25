@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:prisma_qr_app/controllers/history_controller.dart';
 import '../controllers/settings_controller.dart';
 
 class SettingsScreen extends StatelessWidget {
@@ -39,7 +40,7 @@ class SettingsScreen extends StatelessWidget {
       body: ListView(
         padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
         children: [
-          // 1. App Info Header
+          // App Info Header
           Center(
             child: Column(
               children: [
@@ -94,7 +95,7 @@ class SettingsScreen extends StatelessWidget {
 
           const SizedBox(height: 32),
 
-          // 2. Scanner Preferences
+          // Scanner Preferences
           _buildSectionHeader(context, 'Scanner Preferences'),
           Container(
             decoration: BoxDecoration(
@@ -148,7 +149,7 @@ class SettingsScreen extends StatelessWidget {
 
           const SizedBox(height: 32),
 
-          // 3. App Settings
+          // App Settings
           _buildSectionHeader(context, 'App Settings'),
           Container(
             decoration: BoxDecoration(
@@ -185,7 +186,7 @@ class SettingsScreen extends StatelessWidget {
                   context,
                   icon: Icons.history,
                   label: 'Clear History',
-                  onTap: () {},
+                  onTap: () => Get.find<HistoryController>().clearHistory(),
                 ),
                 _buildDivider(context),
                 _buildNavigationRow(
@@ -200,7 +201,7 @@ class SettingsScreen extends StatelessWidget {
 
           const SizedBox(height: 32),
 
-          // 4. Footer Links
+          // Footer Links
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [

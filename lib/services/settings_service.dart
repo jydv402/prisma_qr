@@ -17,9 +17,15 @@ class SettingsService {
   // --- Getters ---
   bool get isDarkMode =>
       _prefs.getBool(_isDarkModeKey) ?? true; // Default to dark mode
-  bool get scanSounds => _prefs.getBool(_scanSoundsKey) ?? true;
-  bool get hapticFeedback => _prefs.getBool(_hapticFeedbackKey) ?? true;
-  bool get autoCopy => _prefs.getBool(_autoCopyKey) ?? false;
+
+  bool get scanSounds =>
+      _prefs.getBool(_scanSoundsKey) ?? true; // Default to true
+
+  bool get hapticFeedback =>
+      _prefs.getBool(_hapticFeedbackKey) ?? true; // Default to true
+
+  bool get autoCopy =>
+      _prefs.getBool(_autoCopyKey) ?? false; // Default to false
 
   // --- Setters ---
   Future<void> setDarkMode(bool value) async {

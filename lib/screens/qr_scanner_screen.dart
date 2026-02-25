@@ -16,7 +16,7 @@ class QrScannerScreen extends StatelessWidget {
       backgroundColor: Colors.black, // Dark background for camera
       body: Stack(
         children: [
-          // 1. Camera View
+          // Camera View
           Positioned.fill(
             child: MobileScanner(
               controller: controller.mobileController,
@@ -29,7 +29,7 @@ class QrScannerScreen extends StatelessWidget {
             child: Container(color: Colors.black.withValues(alpha: 0.4)),
           ),
 
-          // 2. Top Bar (Title and Options)
+          // Top Bar (Title and Options)
           Positioned(
             top: 60,
             left: 24,
@@ -59,20 +59,16 @@ class QrScannerScreen extends StatelessWidget {
                   ],
                 ),
                 Container(
-                  width: 40,
-                  height: 40,
+                  width: 50,
+                  height: 50,
                   decoration: BoxDecoration(
                     color: Colors.white.withValues(alpha: 0.2),
                     shape: BoxShape.circle,
                   ),
                   child: IconButton(
-                    icon: const Icon(
-                      Icons.settings,
-                      color: Colors.white,
-                      size: 20,
-                    ),
+                    icon: const Icon(Icons.settings, color: Colors.white),
                     onPressed: () {
-                      Get.to(() => const SettingsScreen());
+                      Get.toNamed('/settings');
                     },
                   ),
                 ),
@@ -80,14 +76,14 @@ class QrScannerScreen extends StatelessWidget {
             ),
           ),
 
-          // 3. Scanner Frame
+          // Scanner Frame
           Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 _buildScannerFrame(),
                 const SizedBox(height: 48),
-                // 4. Flash and Gallery Buttons
+                // Flash and Gallery Buttons
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -113,7 +109,7 @@ class QrScannerScreen extends StatelessWidget {
             ),
           ),
 
-          // 5. Recent Scan Card (Floating above bottom nav)
+          // Recent Scan Card (Floating above bottom nav)
           Positioned(
             bottom: 120, // Above bottom nav
             left: 24,

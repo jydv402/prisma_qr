@@ -25,7 +25,7 @@ class _ScanSavedHistoryScreenState extends State<ScanSavedHistoryScreen> {
       body: SafeArea(
         child: Column(
           children: [
-            // 1. Header
+            // Header
             Padding(
               padding: const EdgeInsets.only(
                 left: 16,
@@ -41,7 +41,7 @@ class _ScanSavedHistoryScreenState extends State<ScanSavedHistoryScreen> {
                     onPressed: () {
                       // Navigate back to scanner via bottom nav
                       final BottomNavController controller = Get.find();
-                      controller.changeIndex(0);
+                      controller.changeIndex(1);
                     },
                     style: IconButton.styleFrom(
                       backgroundColor: Theme.of(context).colorScheme.surface,
@@ -72,7 +72,7 @@ class _ScanSavedHistoryScreenState extends State<ScanSavedHistoryScreen> {
                   bottom: 120,
                 ),
                 children: [
-                  // 2. Custom Tab Bar (Scanned / Saved)
+                  // Custom Tab Bar (Scanned / Saved)
                   Container(
                     margin: const EdgeInsets.symmetric(vertical: 16),
                     padding: const EdgeInsets.all(4),
@@ -158,7 +158,7 @@ class _ScanSavedHistoryScreenState extends State<ScanSavedHistoryScreen> {
                     ),
                   ),
 
-                  // 3. Lists matching mockup grouped by dates
+                  // Lists matching mockup grouped by dates
                   const SizedBox(height: 8),
 
                   AnimatedSwitcher(

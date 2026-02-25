@@ -33,7 +33,7 @@ class ScanResultBottomSheet extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // 1. Drag Handle
+              // Drag Handle
               Center(
                 child: Container(
                   width: 48,
@@ -46,7 +46,7 @@ class ScanResultBottomSheet extends StatelessWidget {
                 ),
               ),
 
-              // 2. Header
+              // Header
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -118,7 +118,7 @@ class ScanResultBottomSheet extends StatelessWidget {
 
               const SizedBox(height: 24),
 
-              // 3. Link Container
+              // Link Container
               Container(
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
@@ -176,7 +176,13 @@ class ScanResultBottomSheet extends StatelessWidget {
                     ),
                     IconButton(
                       icon: Icon(Icons.content_copy, color: Colors.grey[400]),
-                      onPressed: () {},
+                      onPressed: () {
+                        Clipboard.setData(ClipboardData(text: record.data));
+                        Get.snackbar(
+                          'Copied',
+                          'QR code data copied to clipboard',
+                        );
+                      },
                     ),
                   ],
                 ),
@@ -184,7 +190,7 @@ class ScanResultBottomSheet extends StatelessWidget {
 
               const SizedBox(height: 24),
 
-              // 4. Info Cards Grid
+              // Info Cards Grid
               Row(
                 children: [
                   Expanded(
@@ -209,7 +215,7 @@ class ScanResultBottomSheet extends StatelessWidget {
 
               const SizedBox(height: 32),
 
-              // 5. Action Buttons
+              // Action Buttons
               SizedBox(
                 width: double.infinity,
                 height: 56,

@@ -30,6 +30,8 @@ class QrMakerController extends GetxController {
         'Error',
         'Please enter some data to generate a QR code.',
         snackPosition: SnackPosition.BOTTOM,
+        isDismissible: true,
+        shouldIconPulse: true,
       );
       return;
     }

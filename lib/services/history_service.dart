@@ -4,13 +4,17 @@ import 'package:path_provider/path_provider.dart';
 import '../models/qr_code_model.dart';
 
 class HistoryService {
+  // JSON file name
   static const String _fileName = 'qr_history.json';
 
+  // Get the directory path, platform dependent
+  // On android it returns the path to the app's documents directory
   Future<File> get _file async {
     final directory = await getApplicationDocumentsDirectory();
     return File('${directory.path}/$_fileName');
   }
 
+  // Load history from JSON file
   Future<List<QrCodeRecord>> loadHistory() async {
     try {
       final file = await _file;
@@ -28,6 +32,7 @@ class HistoryService {
     }
   }
 
+  // Save history to JSON file
   Future<void> saveHistory(List<QrCodeRecord> history) async {
     try {
       final file = await _file;
@@ -35,6 +40,15 @@ class HistoryService {
       await file.writeAsString(json.encode(jsonList));
     } catch (e) {
       print('Error saving history: $e');
+    }
+  }
+
+  Future<void> clearHistory() async {
+    try {
+      final file = await _file;
+      await file.writeAsString('[]');
+    } catch (e) {
+      print('Error clearing history: $e');
     }
   }
 }

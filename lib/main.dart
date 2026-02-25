@@ -16,6 +16,7 @@ void main() async {
   // Initialize Settings Controller
   Get.put(SettingsController(Get.find<SettingsService>()));
 
+  // Initialize History Controller
   Get.put(HistoryController());
 
   runApp(const PrismaQrApp());

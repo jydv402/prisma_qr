@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:prisma_qr_app/controllers/bottom_nav_controller.dart';
 import '../controllers/qr_maker_controller.dart';
 import '../controllers/history_controller.dart';
-import 'scan_result_bottom_sheet.dart';
+import '../widgets/scan_result_bottom_sheet.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 class QrMakerHistoryScreen extends StatelessWidget {
@@ -44,7 +44,6 @@ class QrMakerHistoryScreen extends StatelessWidget {
                       Text(
                         'Create and scan QR codes',
                         style: TextStyle(
-                          color: Colors.white70,
                           fontSize: 14,
                           fontWeight: FontWeight.w500,
                         ),
@@ -220,6 +219,7 @@ class QrMakerHistoryScreen extends StatelessWidget {
             ),
             child: TextField(
               controller: controller.textController,
+              focusNode: controller.focusNode,
               decoration: InputDecoration(
                 icon: Icon(Icons.link, color: Colors.grey[400]),
                 hintText: 'Enter website URL or text',
@@ -288,7 +288,10 @@ class QrMakerHistoryScreen extends StatelessWidget {
               () => ElevatedButton(
                 onPressed: controller.isGenerating.value
                     ? null
-                    : () => controller.generateQrCode(),
+                    : () {
+                        controller.generateQrCode();
+                        controller.focusNode.unfocus();
+                      },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: isDark ? Colors.white : Colors.black,
                   foregroundColor: isDark ? Colors.black : Colors.white,

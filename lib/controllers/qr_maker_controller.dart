@@ -3,10 +3,11 @@ import 'package:get/get.dart';
 import '../models/qr_code_model.dart';
 import '../controllers/history_controller.dart';
 import 'package:uuid/uuid.dart';
-import '../screens/scan_result_bottom_sheet.dart';
+import '../widgets/scan_result_bottom_sheet.dart';
 
 class QrMakerController extends GetxController {
   final TextEditingController textController = TextEditingController();
+  final FocusNode focusNode = FocusNode();
   final HistoryController _historyController = Get.find();
   final _uuid = const Uuid();
 
@@ -30,6 +31,8 @@ class QrMakerController extends GetxController {
         'Error',
         'Please enter some data to generate a QR code.',
         snackPosition: SnackPosition.BOTTOM,
+        margin: EdgeInsets.fromLTRB(16, 16, 16, 16),
+        icon: Icon(Icons.error_outline_rounded),
         isDismissible: true,
         shouldIconPulse: true,
       );
@@ -67,5 +70,7 @@ class QrMakerController extends GetxController {
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
     );
+
+    textController.clear();
   }
 }

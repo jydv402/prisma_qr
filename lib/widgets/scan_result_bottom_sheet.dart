@@ -161,13 +161,9 @@ class ScanResultBottomSheet extends StatelessWidget {
                             overflow: TextOverflow.ellipsis,
                           ),
                           Text(
-                            record.format == 'URL'
-                                ? 'Tap open below to visit'
-                                : 'Raw Data',
+                            _getLinkSubtext(),
                             style: TextStyle(
-                              color: isDark
-                                  ? Colors.grey[400]
-                                  : Colors.grey[500],
+                              color: _getLinkSubtextColor(isDark),
                               fontSize: 12,
                             ),
                           ),
@@ -194,11 +190,17 @@ class ScanResultBottomSheet extends StatelessWidget {
               Row(
                 children: [
                   Expanded(
-                    child: _buildInfoCard(
-                      context,
-                      icon: Icons.security,
-                      title: 'Safe URL',
-                      subtitle: 'No threats detected',
+                    child: Builder(
+                      builder: (context) {
+                        final safetyInfo = _getSafetyInfo();
+                        return _buildInfoCard(
+                          context,
+                          icon: safetyInfo.icon,
+                          iconColor: safetyInfo.iconColor,
+                          title: safetyInfo.title,
+                          subtitle: safetyInfo.subtitle,
+                        );
+                      },
                     ),
                   ),
                   const SizedBox(width: 16),
@@ -303,6 +305,7 @@ class ScanResultBottomSheet extends StatelessWidget {
   Widget _buildInfoCard(
     BuildContext context, {
     required IconData icon,
+    Color? iconColor,
     required String title,
     required String subtitle,
   }) {
@@ -318,7 +321,7 @@ class ScanResultBottomSheet extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(icon, color: Colors.grey[400], size: 20),
+          Icon(icon, color: iconColor ?? Colors.grey[400], size: 20),
           const SizedBox(height: 8),
           Text(
             title,
@@ -380,4 +383,86 @@ class ScanResultBottomSheet extends StatelessWidget {
         return Icons.text_fields;
     }
   }
+
+  // Helper methods
+
+  /// Returns the subtext for the link
+  /// Checks if the link starts with https:// or http://
+  /// Returns 'Secure Connection • HTTPS' if the link starts with https://
+  /// Returns 'Insecure Connection • HTTP' if the link starts with http://
+  /// Returns 'Link to visit' if the link starts with anything else
+  String _getLinkSubtext() {
+    if (record.format == 'URL') {
+      if (record.data.toLowerCase().startsWith('https://')) {
+        return 'Secure Connection • HTTPS';
+      } else if (record.data.toLowerCase().startsWith('http://')) {
+        return 'Insecure Connection • HTTP';
+      }
+      return 'Link to visit';
+    }
+    return 'Raw Data Extract';
+  }
+
+  /// Returns the color for the link subtext
+  /// Checks if the link starts with https:// or http://
+  /// Returns green if the link starts with https://
+  /// Returns orange if the link starts with http://
+  /// Returns grey if the link starts with anything else
+  Color _getLinkSubtextColor(bool isDark) {
+    if (record.format == 'URL') {
+      if (record.data.toLowerCase().startsWith('https://')) {
+        return isDark ? Colors.green[400]! : Colors.green[600]!;
+      } else if (record.data.toLowerCase().startsWith('http://')) {
+        return isDark ? Colors.orange[400]! : Colors.orange[600]!;
+      }
+    }
+    return isDark ? Colors.grey[400]! : Colors.grey[500]!;
+  }
+
+  /// Returns the safety info for the link
+  /// Checks if the link starts with https:// or http://
+  /// Returns green if the link starts with https://
+  /// Returns orange if the link starts with http://
+  /// Returns blue if the link starts with anything else
+  _SafetyInfo _getSafetyInfo() {
+    if (record.format == 'URL') {
+      final isHttps = record.data.toLowerCase().startsWith('https://');
+      if (isHttps) {
+        return _SafetyInfo(
+          icon: Icons.gpp_good,
+          iconColor: Colors.green,
+          title: 'Secure',
+          subtitle: 'Encrypted traffic',
+        );
+      } else {
+        return _SafetyInfo(
+          icon: Icons.gpp_maybe,
+          iconColor: Colors.orange,
+          title: 'Insecure',
+          subtitle: 'Unencrypted traffic',
+        );
+      }
+    } else {
+      return _SafetyInfo(
+        icon: Icons.offline_pin,
+        iconColor: Colors.blue,
+        title: 'Offline',
+        subtitle: 'No web threats',
+      );
+    }
+  }
+}
+
+class _SafetyInfo {
+  final IconData icon;
+  final Color iconColor;
+  final String title;
+  final String subtitle;
+
+  _SafetyInfo({
+    required this.icon,
+    required this.iconColor,
+    required this.title,
+    required this.subtitle,
+  });
 }

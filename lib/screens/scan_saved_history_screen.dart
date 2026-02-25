@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../controllers/bottom_nav_controller.dart';
 import '../controllers/history_controller.dart';
-import 'scan_result_bottom_sheet.dart';
+import '../widgets/scan_result_bottom_sheet.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 class ScanSavedHistoryScreen extends StatefulWidget {
@@ -49,7 +49,6 @@ class _ScanSavedHistoryScreenState extends State<ScanSavedHistoryScreen> {
                       Text(
                         'Scan and Saved history',
                         style: TextStyle(
-                          color: Colors.white70,
                           fontSize: 14,
                           fontWeight: FontWeight.w500,
                         ),

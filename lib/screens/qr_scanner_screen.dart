@@ -106,14 +106,6 @@ class QrScannerScreen extends StatelessWidget {
               ],
             ),
           ),
-
-          // Recent Scan Card (Floating above bottom nav)
-          Positioned(
-            bottom: 120, // Above bottom nav
-            left: 24,
-            right: 24,
-            child: _buildRecentScanCard(context),
-          ),
         ],
       ),
     );
@@ -234,72 +226,6 @@ class QrScannerScreen extends StatelessWidget {
           ),
         ),
       ],
-    );
-  }
-
-  Widget _buildRecentScanCard(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: isDark
-            ? const Color(0xFF1C1C1E).withValues(alpha: 0.9)
-            : Colors.white.withValues(alpha: 0.9),
-        borderRadius: BorderRadius.circular(24),
-        border: Border.all(
-          color: isDark ? Colors.white10 : Colors.black.withValues(alpha: 0.05),
-        ),
-      ),
-      child: Row(
-        children: [
-          Container(
-            width: 40,
-            height: 40,
-            decoration: BoxDecoration(
-              color: Colors.blue.withValues(alpha: isDark ? 0.3 : 0.1),
-              shape: BoxShape.circle,
-            ),
-            child: const Icon(Icons.link, color: Colors.blue, size: 20),
-          ),
-          const SizedBox(width: 16),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'nixtio.com/design',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: isDark ? Colors.white : Colors.black,
-                  ),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                Text(
-                  'Scanned just now',
-                  style: TextStyle(
-                    fontSize: 12,
-                    color: isDark ? Colors.grey[400] : Colors.grey[500],
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Container(
-            width: 32,
-            height: 32,
-            decoration: BoxDecoration(
-              color: isDark ? Colors.grey[800] : Colors.grey[100],
-              shape: BoxShape.circle,
-            ),
-            child: Icon(
-              Icons.arrow_forward,
-              size: 16,
-              color: isDark ? Colors.grey[400] : Colors.grey[600],
-            ),
-          ),
-        ],
-      ),
     );
   }
 }

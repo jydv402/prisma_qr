@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:prisma_qr_app/controllers/history_controller.dart';
+import 'package:prisma_qr_app/widgets/confirmation_bottom_sheet.dart';
 import '../controllers/settings_controller.dart';
 
 class SettingsScreen extends StatelessWidget {
@@ -186,7 +187,14 @@ class SettingsScreen extends StatelessWidget {
                   context,
                   icon: Icons.history,
                   label: 'Clear History',
-                  onTap: () => Get.find<HistoryController>().clearHistory(),
+                  onTap: () => Get.bottomSheet(
+                    ConfirmationBottomSheet(
+                      header: "Clear History",
+                      message: "Are you sure you want to clear your history?",
+                      onConfirm: () =>
+                          Get.find<HistoryController>().clearHistory(),
+                    ),
+                  ),
                 ),
                 _buildDivider(context),
                 _buildNavigationRow(

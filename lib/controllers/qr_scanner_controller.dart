@@ -4,7 +4,7 @@ import 'package:flutter_vibrate/flutter_vibrate.dart';
 import '../models/qr_code_model.dart';
 import 'history_controller.dart';
 import 'package:uuid/uuid.dart';
-import '../screens/scan_result_bottom_sheet.dart';
+import '../widgets/scan_result_bottom_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'settings_controller.dart';

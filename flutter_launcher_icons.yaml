@@ -1,0 +1,34 @@
+# flutter pub run flutter_launcher_icons
+flutter_launcher_icons:
+  image_path: "assets/branding/prisma_branding.png"
+
+  android: "launcher_icon"
+  image_path_android: "assets/branding/prisma_branding.png"
+  min_sdk_android: 21 # android min sdk min:16, default 21
+  adaptive_icon_background: "#ECF4E8"
+  adaptive_icon_foreground: "assets/branding/prisma_fore.png"
+  adaptive_icon_foreground_inset: 20
+  adaptive_icon_monochrome: "assets/branding/prisma_fore.png"
+
+  ios: true
+  image_path_ios: "assets/branding/prisma_branding.png"
+  remove_alpha_ios: true
+  image_path_ios_dark_transparent: "assets/branding/prisma_fore.png"
+  image_path_ios_tinted_grayscale: "assets/branding/prisma_fore.png"
+  desaturate_tinted_to_grayscale_ios: true
+  background_color_ios: "#ECF4E8"
+
+  web:
+    generate: true
+    image_path: "assets/branding/prisma_branding.png"
+    background_color: "#ECF4E8"
+    theme_color: "#ECF4E8"
+
+  windows:
+    generate: true
+    image_path: "assets/branding/prisma_branding.png"
+    icon_size: 48 # min:48, max:256, default: 48
+
+  macos:
+    generate: true
+    image_path: "assets/branding/prisma_branding.png"

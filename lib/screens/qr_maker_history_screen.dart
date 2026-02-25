@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:prisma_qr_app/controllers/bottom_nav_controller.dart';
+import 'package:qr_flutter/qr_flutter.dart';
 import '../controllers/qr_maker_controller.dart';
 import '../controllers/history_controller.dart';
 import '../widgets/scan_result_bottom_sheet.dart';
@@ -414,10 +415,15 @@ class QrMakerHistoryScreen extends StatelessWidget {
             ),
             padding: const EdgeInsets.all(4),
             child: Center(
-              child: Icon(
-                Icons.qr_code,
-                color: isDark ? Colors.black : Colors.grey[600],
-              ), // Placeholder for actual QR code thumbnail
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(8),
+                child: QrImageView(
+                  data: title, // Data is passed as title
+                  version: QrVersions.auto,
+                  backgroundColor: Colors.white,
+                  padding: const EdgeInsets.all(2),
+                ),
+              ),
             ),
           ),
           const SizedBox(width: 16),

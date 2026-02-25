@@ -3,7 +3,7 @@
     "short_name": "Prisma QR",
     "start_url": ".",
     "display": "standalone",
-    "background_color": "#ECF4E8",
+    "background_color": "#FFFFFF",
     "theme_color": "#ECF4E8",
     "description": "QR Code Scanner & Generator",
     "orientation": "portrait-primary",

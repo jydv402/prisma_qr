@@ -50,6 +50,7 @@ class SettingsScreen extends StatelessWidget {
                   height: 96,
                   decoration: BoxDecoration(
                     color: Theme.of(context).colorScheme.surface,
+                    // color: Colors.white,
                     borderRadius: BorderRadius.circular(24),
                     boxShadow: [
                       if (!isDark)
@@ -60,10 +61,10 @@ class SettingsScreen extends StatelessWidget {
                         ),
                     ],
                   ),
-                  child: Icon(
-                    Icons.qr_code_scanner,
-                    size: 40,
-                    color: isDark ? Colors.white : Colors.black,
+                  child: FractionallySizedBox(
+                    widthFactor: 0.75,
+                    heightFactor: 0.75,
+                    child: Image.asset('assets/branding/prisma_fore.png'),
                   ),
                 ),
                 const SizedBox(height: 16),

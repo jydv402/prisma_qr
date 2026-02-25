@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:get/get.dart';
+import 'package:qr_flutter/qr_flutter.dart';
 import '../models/qr_code_model.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
@@ -110,8 +111,15 @@ class ScanResultBottomSheet extends StatelessWidget {
                           : Colors.grey[100],
                       borderRadius: BorderRadius.circular(16),
                     ),
-                    child:
-                        Placeholder(), // Placeholder for Google Icon from mockup
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(16),
+                      child: QrImageView(
+                        data: record.data,
+                        version: QrVersions.auto,
+                        backgroundColor: Colors.white,
+                        padding: const EdgeInsets.all(4),
+                      ),
+                    ),
                   ),
                 ],
               ),

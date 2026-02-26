@@ -102,22 +102,22 @@ class ScanResultBottomSheet extends StatelessWidget {
                       ),
                     ],
                   ),
-                  Container(
-                    width: 48,
-                    height: 48,
-                    decoration: BoxDecoration(
-                      color: isDark
-                          ? Colors.grey[800]!.withValues(alpha: 0.5)
-                          : Colors.grey[100],
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(16),
-                      child: QrImageView(
-                        data: record.data,
-                        version: QrVersions.auto,
-                        backgroundColor: Colors.white,
-                        padding: const EdgeInsets.all(4),
+                  // QR Image
+                  GestureDetector(
+                    onTap: () {
+                      Get.toNamed('/qrDisplay', arguments: record);
+                    },
+                    child: SizedBox(
+                      width: 63,
+                      height: 63,
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(8),
+                        child: QrImageView(
+                          data: record.data,
+                          version: QrVersions.auto,
+                          backgroundColor: Colors.white,
+                          padding: const EdgeInsets.all(8),
+                        ),
                       ),
                     ),
                   ),

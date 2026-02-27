@@ -248,7 +248,7 @@ class QrMakerHistoryScreen extends StatelessWidget {
               focusNode: controller.focusNode1,
               decoration: InputDecoration(
                 icon: Icon(Icons.link, color: Colors.grey[400]),
-                hintText: 'Enter website URL or text',
+                hintText: 'Enter QR content',
                 border: InputBorder.none,
                 hintStyle: TextStyle(
                   color: Colors.grey[400],

@@ -81,6 +81,7 @@ class QrMakerHistoryScreen extends StatelessWidget {
                   right: 20,
                   bottom: 120,
                 ),
+
                 children: [
                   // New Code Card
                   _buildNewCodeCard(context, makerController),
@@ -131,7 +132,8 @@ class QrMakerHistoryScreen extends StatelessWidget {
                     }
 
                     return Column(
-                      children: historyController.generatedHistory.map((
+                      // Show only 2 of the previous history items
+                      children: historyController.generatedHistory.take(2).map((
                         record,
                       ) {
                         return Padding(
@@ -147,9 +149,7 @@ class QrMakerHistoryScreen extends StatelessWidget {
                             child: _buildHistoryItem(
                               context,
                               record.title ??
-                                  (record.type == 'scan'
-                                      ? 'Scan ${record.id.substring(0, 4)}'
-                                      : 'Generated ${record.id.substring(0, 4)}'),
+                                  'Generated ${record.id.substring(0, 4)}',
                               record.data,
                               record.format,
                               timeago.format(record.timestamp),
@@ -160,6 +160,13 @@ class QrMakerHistoryScreen extends StatelessWidget {
                       }).toList(),
                     );
                   }),
+
+                  // Text to inform this only shows the last 2 history items
+                  const Text(
+                    'Only the last 2 history items are shown here.',
+                    style: TextStyle(color: Colors.grey),
+                    textAlign: .center,
+                  ),
                 ],
               ),
             ),

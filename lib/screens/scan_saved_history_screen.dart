@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../controllers/bottom_nav_controller.dart';
 import '../controllers/history_controller.dart';
 import '../widgets/scan_result_bottom_sheet.dart';
 import 'package:timeago/timeago.dart' as timeago;
@@ -47,7 +46,7 @@ class _ScanSavedHistoryScreenState extends State<ScanSavedHistoryScreen> {
                             ?.copyWith(fontWeight: FontWeight.bold),
                       ),
                       Text(
-                        'Scanned & Saved history',
+                        'Scanned & Generated history',
                         style: TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.w500,
@@ -79,112 +78,131 @@ class _ScanSavedHistoryScreenState extends State<ScanSavedHistoryScreen> {
             ),
 
             Expanded(
-              child: ListView(
-                padding: const EdgeInsets.only(
-                  left: 20,
-                  right: 20,
-                  bottom: 120,
+              child: GestureDetector(
+                onHorizontalDragEnd: (details) {
+                  // Swipe right to go to generated tab
+                  if (details.primaryVelocity! > 0) {
+                    setState(() => _isScannedTab = true);
+                  } else {
+                    setState(() => _isScannedTab = false);
+                  }
+                },
+                child: ListView(
+                  padding: const EdgeInsets.only(
+                    left: 20,
+                    right: 20,
+                    bottom: 120,
+                  ),
+                  children: [
+                    // Custom Tab Bar (Scanned / Saved)
+                    Container(
+                      margin: const EdgeInsets.symmetric(vertical: 16),
+                      padding: const EdgeInsets.all(4),
+                      decoration: BoxDecoration(
+                        color: isDark ? Colors.grey[800] : Colors.grey[200],
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: GestureDetector(
+                              onTap: () => setState(() => _isScannedTab = true),
+                              child: AnimatedContainer(
+                                duration: const Duration(milliseconds: 200),
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: 12,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: _isScannedTab
+                                      ? (isDark ? Colors.white : Colors.white)
+                                      : Colors.transparent,
+                                  borderRadius: BorderRadius.circular(12),
+                                  boxShadow: _isScannedTab && !isDark
+                                      ? [
+                                          BoxShadow(
+                                            color: Colors.black12,
+                                            blurRadius: 4,
+                                          ),
+                                        ]
+                                      : null,
+                                ),
+                                child: Center(
+                                  child: Text(
+                                    'Scanned',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: _isScannedTab
+                                          ? (isDark
+                                                ? Colors.black
+                                                : Colors.black)
+                                          : (isDark
+                                                ? Colors.grey[400]
+                                                : Colors.grey[600]),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                          Expanded(
+                            child: GestureDetector(
+                              onTap: () =>
+                                  setState(() => _isScannedTab = false),
+                              child: AnimatedContainer(
+                                duration: const Duration(milliseconds: 200),
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: 12,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: !_isScannedTab
+                                      ? (isDark ? Colors.white : Colors.white)
+                                      : Colors.transparent,
+                                  borderRadius: BorderRadius.circular(12),
+                                  boxShadow: !_isScannedTab && !isDark
+                                      ? [
+                                          BoxShadow(
+                                            color: Colors.black12,
+                                            blurRadius: 4,
+                                          ),
+                                        ]
+                                      : null,
+                                ),
+                                child: Center(
+                                  child: Text(
+                                    'Generated',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: !_isScannedTab
+                                          ? (isDark
+                                                ? Colors.black
+                                                : Colors.black)
+                                          : (isDark
+                                                ? Colors.grey[400]
+                                                : Colors.grey[600]),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+
+                    // Lists matching mockup grouped by dates
+                    const SizedBox(height: 8),
+
+                    AnimatedSwitcher(
+                      duration: const Duration(milliseconds: 300),
+                      transitionBuilder: (child, animation) {
+                        return FadeTransition(opacity: animation, child: child);
+                      },
+                      child: _isScannedTab
+                          ? _buildScannedList(context)
+                          : _buildSavedList(context),
+                    ),
+                  ],
                 ),
-                children: [
-                  // Custom Tab Bar (Scanned / Saved)
-                  Container(
-                    margin: const EdgeInsets.symmetric(vertical: 16),
-                    padding: const EdgeInsets.all(4),
-                    decoration: BoxDecoration(
-                      color: isDark ? Colors.grey[800] : Colors.grey[200],
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: GestureDetector(
-                            onTap: () => setState(() => _isScannedTab = true),
-                            child: AnimatedContainer(
-                              duration: const Duration(milliseconds: 200),
-                              padding: const EdgeInsets.symmetric(vertical: 12),
-                              decoration: BoxDecoration(
-                                color: _isScannedTab
-                                    ? (isDark ? Colors.white : Colors.white)
-                                    : Colors.transparent,
-                                borderRadius: BorderRadius.circular(12),
-                                boxShadow: _isScannedTab && !isDark
-                                    ? [
-                                        BoxShadow(
-                                          color: Colors.black12,
-                                          blurRadius: 4,
-                                        ),
-                                      ]
-                                    : null,
-                              ),
-                              child: Center(
-                                child: Text(
-                                  'Scanned',
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    color: _isScannedTab
-                                        ? (isDark ? Colors.black : Colors.black)
-                                        : (isDark
-                                              ? Colors.grey[400]
-                                              : Colors.grey[600]),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                        Expanded(
-                          child: GestureDetector(
-                            onTap: () => setState(() => _isScannedTab = false),
-                            child: AnimatedContainer(
-                              duration: const Duration(milliseconds: 200),
-                              padding: const EdgeInsets.symmetric(vertical: 12),
-                              decoration: BoxDecoration(
-                                color: !_isScannedTab
-                                    ? (isDark ? Colors.white : Colors.white)
-                                    : Colors.transparent,
-                                borderRadius: BorderRadius.circular(12),
-                                boxShadow: !_isScannedTab && !isDark
-                                    ? [
-                                        BoxShadow(
-                                          color: Colors.black12,
-                                          blurRadius: 4,
-                                        ),
-                                      ]
-                                    : null,
-                              ),
-                              child: Center(
-                                child: Text(
-                                  'Saved',
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    color: !_isScannedTab
-                                        ? (isDark ? Colors.black : Colors.black)
-                                        : (isDark
-                                              ? Colors.grey[400]
-                                              : Colors.grey[600]),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-
-                  // Lists matching mockup grouped by dates
-                  const SizedBox(height: 8),
-
-                  AnimatedSwitcher(
-                    duration: const Duration(milliseconds: 300),
-                    transitionBuilder: (child, animation) {
-                      return FadeTransition(opacity: animation, child: child);
-                    },
-                    child: _isScannedTab
-                        ? _buildScannedList(context)
-                        : _buildSavedList(context),
-                  ),
-                ],
               ),
             ),
           ],

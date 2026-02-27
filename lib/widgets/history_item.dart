@@ -83,8 +83,11 @@ class HistoryItem extends StatelessWidget {
             width: 56,
             height: 56,
             decoration: BoxDecoration(
-              color: isDark ? Colors.white : Colors.grey[100],
+              color: Colors.white,
               borderRadius: BorderRadius.circular(12),
+              border: Border.all(
+                color: isDark ? Colors.grey[800]! : Colors.grey[300]!,
+              ),
             ),
             padding: const EdgeInsets.all(2),
             child: Center(
@@ -94,7 +97,7 @@ class HistoryItem extends StatelessWidget {
                   data: subtitle,
                   version: QrVersions.auto,
                   backgroundColor: Colors.white,
-                  padding: const EdgeInsets.all(8),
+                  padding: const EdgeInsets.all(6),
                 ),
               ),
             ),

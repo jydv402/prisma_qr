@@ -161,7 +161,7 @@ class QrMakerHistoryScreen extends StatelessWidget {
                               type: record
                                   .type, // Type of the QR, scanned or generated
                               time: timeago.format(record.timestamp),
-                              formatColor: Colors.amber,
+                              formatColor: Colors.orange,
                               typeColor: Colors.blue,
                             ),
                           ),

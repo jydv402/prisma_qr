@@ -123,7 +123,7 @@ class _ScanResultBottomSheetState extends State<ScanResultBottomSheet> {
                       Row(
                         spacing: 4,
                         children: [
-                          _buildTag(record.format, Colors.amber, isDark),
+                          _buildTag(record.format, Colors.orange, isDark),
 
                           _buildTag(
                             record.type.toUpperCase(),

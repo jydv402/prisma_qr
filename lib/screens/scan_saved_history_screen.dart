@@ -177,6 +177,9 @@ class _ScanSavedHistoryScreenState extends State<ScanSavedHistoryScreen> {
 
                   AnimatedSwitcher(
                     duration: const Duration(milliseconds: 300),
+                    transitionBuilder: (child, animation) {
+                      return FadeTransition(opacity: animation, child: child);
+                    },
                     child: _isScannedTab
                         ? _buildScannedList(context)
                         : _buildSavedList(context),
@@ -219,10 +222,7 @@ class _ScanSavedHistoryScreenState extends State<ScanSavedHistoryScreen> {
               child: _buildHistoryListItem(
                 context,
                 record.iconName,
-                record.title ??
-                    (record.type == 'scan'
-                        ? 'Scan ${record.id.substring(0, 4)}'
-                        : 'Generated ${record.id.substring(0, 4)}'),
+                record.title ?? 'Scan ${record.id.substring(0, 4)}',
                 record.data,
                 timeago.format(record.timestamp),
               ),
@@ -262,10 +262,7 @@ class _ScanSavedHistoryScreenState extends State<ScanSavedHistoryScreen> {
               child: _buildHistoryListItem(
                 context,
                 record.iconName,
-                record.title ??
-                    (record.type == 'scan'
-                        ? 'Scan ${record.id.substring(0, 4)}'
-                        : 'Generated ${record.id.substring(0, 4)}'),
+                record.title ?? 'Generated ${record.id.substring(0, 4)}',
                 record.data,
                 timeago.format(record.timestamp),
               ),

@@ -29,7 +29,7 @@ class QrMakerHistoryScreen extends StatelessWidget {
                 left: 24,
                 right: 24,
                 top: 18,
-                bottom: 8,
+                bottom: 18,
               ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -85,15 +85,15 @@ class QrMakerHistoryScreen extends StatelessWidget {
                   // New Code Card
                   _buildNewCodeCard(context, makerController),
 
-                  const SizedBox(height: 16),
+                  const SizedBox(height: 8),
 
                   // History Section
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.end,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Text(
-                        'History',
+                        'Previously Created',
                         style: Theme.of(context).textTheme.titleLarge?.copyWith(
                           fontWeight: FontWeight.bold,
                         ),
@@ -173,7 +173,7 @@ class QrMakerHistoryScreen extends StatelessWidget {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Container(
-      padding: const EdgeInsets.all(24),
+      padding: const .all(16),
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.surface,
         borderRadius: BorderRadius.circular(32),
@@ -203,7 +203,7 @@ class QrMakerHistoryScreen extends StatelessWidget {
                   size: 20,
                 ),
               ),
-              const SizedBox(width: 12),
+              const SizedBox(width: 16),
               Text(
                 'New Code',
                 style: Theme.of(
@@ -212,7 +212,7 @@ class QrMakerHistoryScreen extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: 24),
+          const SizedBox(height: 12),
 
           // Input Field (Data)
           Container(
@@ -223,7 +223,7 @@ class QrMakerHistoryScreen extends StatelessWidget {
             ),
             child: TextField(
               controller: controller.textController,
-              focusNode: controller.focusNode,
+              focusNode: controller.focusNode1,
               decoration: InputDecoration(
                 icon: Icon(Icons.link, color: Colors.grey[400]),
                 hintText: 'Enter website URL or text',
@@ -233,6 +233,7 @@ class QrMakerHistoryScreen extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 12),
+
           // Input Field (Title)
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
@@ -242,6 +243,7 @@ class QrMakerHistoryScreen extends StatelessWidget {
             ),
             child: TextField(
               controller: controller.titleController,
+              focusNode: controller.focusNode2,
               decoration: InputDecoration(
                 icon: Icon(Icons.title, color: Colors.grey[400]),
                 hintText: 'Name (Optional)',
@@ -312,7 +314,8 @@ class QrMakerHistoryScreen extends StatelessWidget {
                     ? null
                     : () {
                         controller.generateQrCode();
-                        controller.focusNode.unfocus();
+                        controller.focusNode1.unfocus();
+                        controller.focusNode2.unfocus();
                       },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: isDark ? Colors.white : Colors.black,

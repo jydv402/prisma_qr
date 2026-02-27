@@ -103,7 +103,7 @@ class QrScannerController extends GetxController {
           format = 'Contact';
         }
 
-        // Save to history
+        // Save to history and get the canonical record
         final record = QrCodeRecord(
           id: _uuid.v4(),
           data: rawValue,
@@ -111,7 +111,7 @@ class QrScannerController extends GetxController {
           format: format,
           timestamp: DateTime.now(),
         );
-        await _historyController.addRecord(record);
+        final savedRecord = await _historyController.addRecord(record);
 
         // Auto Copy hook
         if (_settingsController.autoCopy.value) {
@@ -125,9 +125,9 @@ class QrScannerController extends GetxController {
           );
         }
 
-        // Show Bottom Sheet here with rawValue
+        // Show Bottom Sheet here with deduplicated record
         await Get.bottomSheet(
-          ScanResultBottomSheet(record: record),
+          ScanResultBottomSheet(record: savedRecord),
           isScrollControlled: true,
           backgroundColor: Colors.transparent,
         );

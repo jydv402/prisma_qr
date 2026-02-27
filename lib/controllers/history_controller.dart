@@ -27,39 +27,39 @@ class HistoryController extends GetxController {
     generatedHistory.sort((a, b) => b.timestamp.compareTo(a.timestamp));
   }
 
-  Future<void> addRecord(QrCodeRecord record) async {
+  Future<QrCodeRecord> addRecord(QrCodeRecord record) async {
+    QrCodeRecord finalRecord;
     if (record.type == 'scan') {
       int index = scannedHistory.indexWhere((r) => r.data == record.data);
       if (index != -1) {
         var existing = scannedHistory[index];
         scannedHistory.removeAt(index);
-        scannedHistory.insert(
-          0,
-          existing.copyWith(
-            timestamp: record.timestamp,
-            title: record.title ?? existing.title,
-          ),
+        finalRecord = existing.copyWith(
+          timestamp: record.timestamp,
+          title: record.title ?? existing.title,
         );
+        scannedHistory.insert(0, finalRecord);
       } else {
         scannedHistory.insert(0, record);
+        finalRecord = record;
       }
     } else {
       int index = generatedHistory.indexWhere((r) => r.data == record.data);
       if (index != -1) {
         var existing = generatedHistory[index];
         generatedHistory.removeAt(index);
-        generatedHistory.insert(
-          0,
-          existing.copyWith(
-            timestamp: record.timestamp,
-            title: record.title ?? existing.title,
-          ),
+        finalRecord = existing.copyWith(
+          timestamp: record.timestamp,
+          title: record.title ?? existing.title,
         );
+        generatedHistory.insert(0, finalRecord);
       } else {
         generatedHistory.insert(0, record);
+        finalRecord = record;
       }
     }
     await _saveCurrentState();
+    return finalRecord;
   }
 
   Future<void> updateRecord(QrCodeRecord updatedRecord) async {

@@ -8,7 +8,8 @@ import '../widgets/scan_result_bottom_sheet.dart';
 class QrMakerController extends GetxController {
   final TextEditingController textController = TextEditingController();
   final TextEditingController titleController = TextEditingController();
-  final FocusNode focusNode = FocusNode();
+  final FocusNode focusNode1 = FocusNode();
+  final FocusNode focusNode2 = FocusNode();
   final HistoryController _historyController = Get.find();
   final _uuid = const Uuid();
 
@@ -63,13 +64,13 @@ class QrMakerController extends GetxController {
       timestamp: DateTime.now(),
     );
 
-    await _historyController.addRecord(record);
+    final savedRecord = await _historyController.addRecord(record);
     isGenerating.value = false;
 
     // Show success and move to history or pop up
     // Show the bottom sheet with the generated code
     await Get.bottomSheet(
-      ScanResultBottomSheet(record: record),
+      ScanResultBottomSheet(record: savedRecord),
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
     );

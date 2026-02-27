@@ -88,4 +88,11 @@ class HistoryController extends GetxController {
     final allRecords = [...scannedHistory, ...generatedHistory];
     await _historyService.saveHistory(allRecords);
   }
+
+  Future<void> deleteRecord(String id) async {
+    scannedHistory.removeWhere((r) => r.id == id);
+    generatedHistory.removeWhere((r) => r.id == id);
+    await _historyService.deleteRecord(id);
+    await _saveCurrentState();
+  }
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:prisma_qr_app/widgets/confirmation_bottom_sheet.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:get/get.dart';
@@ -111,7 +112,6 @@ class _ScanResultBottomSheetState extends State<ScanResultBottomSheet> {
                   ),
                 ),
               ),
-
               // Header
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -121,63 +121,20 @@ class _ScanResultBottomSheetState extends State<ScanResultBottomSheet> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Row(
+                        spacing: 4,
                         children: [
-                          Container(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 8,
-                              vertical: 4,
-                            ),
-                            decoration: BoxDecoration(
-                              color: Colors.green.withValues(
-                                alpha: isDark ? 0.3 : 0.1,
-                              ),
-                              borderRadius: BorderRadius.circular(6),
-                            ),
-                            child: Text(
-                              record.format.toUpperCase(),
-                              style: TextStyle(
-                                color: isDark
-                                    ? Colors.green[400]
-                                    : Colors.green[600],
-                                fontSize: 10,
-                                fontWeight: FontWeight.bold,
-                                letterSpacing: 0.5,
-                              ),
-                            ),
+                          _buildTag(record.format, Colors.amber, isDark),
+
+                          _buildTag(
+                            record.type.toUpperCase(),
+                            Colors.blue,
+                            isDark,
                           ),
-                          const SizedBox(width: 8),
-                          Container(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 8,
-                              vertical: 4,
-                            ),
-                            decoration: BoxDecoration(
-                              color: Colors.blue.withValues(
-                                alpha: isDark ? 0.3 : 0.1,
-                              ),
-                              borderRadius: BorderRadius.circular(6),
-                            ),
-                            child: Text(
-                              record.type == 'scan' ? 'SCANNED' : 'GENERATED',
-                              style: TextStyle(
-                                color: isDark
-                                    ? Colors.blue[400]
-                                    : Colors.blue[600],
-                                fontSize: 10,
-                                fontWeight: FontWeight.bold,
-                                letterSpacing: 0.5,
-                              ),
-                            ),
-                          ),
-                          const SizedBox(width: 8),
-                          Text(
+
+                          _buildTag(
                             timeago.format(record.timestamp),
-                            style: TextStyle(
-                              color: isDark
-                                  ? Colors.grey[500]
-                                  : Colors.grey[400],
-                              fontSize: 12,
-                            ),
+                            Colors.green,
+                            isDark,
                           ),
                         ],
                       ),
@@ -291,7 +248,7 @@ class _ScanResultBottomSheetState extends State<ScanResultBottomSheet> {
                         Get.snackbar(
                           'Copied',
                           'QR code data copied to clipboard',
-                          snackPosition: SnackPosition.TOP,
+                          snackPosition: SnackPosition.BOTTOM,
                           margin: EdgeInsets.fromLTRB(16, 16, 16, 16),
                           icon: Icon(Icons.done_all_rounded),
                         );
@@ -351,7 +308,7 @@ class _ScanResultBottomSheetState extends State<ScanResultBottomSheet> {
                             Get.snackbar(
                               'Error',
                               'Could not open URL',
-                              snackPosition: SnackPosition.TOP,
+                              snackPosition: SnackPosition.BOTTOM,
                               margin: EdgeInsets.fromLTRB(16, 16, 16, 16),
                               icon: Icon(Icons.error_outline_rounded),
                             );
@@ -390,6 +347,32 @@ class _ScanResultBottomSheetState extends State<ScanResultBottomSheet> {
                   Expanded(
                     child: _buildSecondaryButton(
                       context,
+                      icon: Icons.cleaning_services_rounded,
+                      label: 'Delete',
+                      onTap: () {
+                        Get.bottomSheet(
+                          ConfirmationBottomSheet(
+                            header: "Delete QR Code",
+                            message:
+                                "Are you sure you want to delete this QR code from history?",
+                            onConfirm: () {
+                              if (Get.isRegistered<HistoryController>()) {
+                                Get.find<HistoryController>().deleteRecord(
+                                  _currentRecord.id,
+                                );
+                              }
+                              Get.back();
+                              Get.back();
+                            },
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: _buildSecondaryButton(
+                      context,
                       icon: Icons.share,
                       label: 'Share',
                       onTap: () {
@@ -413,7 +396,7 @@ class _ScanResultBottomSheetState extends State<ScanResultBottomSheet> {
                         Get.snackbar(
                           'Copied',
                           'Data copied to clipboard',
-                          snackPosition: SnackPosition.TOP,
+                          snackPosition: SnackPosition.BOTTOM,
                           margin: EdgeInsets.fromLTRB(16, 16, 16, 16),
                           icon: Icon(Icons.done_all_rounded),
                         );
@@ -424,6 +407,25 @@ class _ScanResultBottomSheetState extends State<ScanResultBottomSheet> {
               ),
             ],
           ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildTag(String label, Color color, bool isDark) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      decoration: BoxDecoration(
+        color: color.withValues(alpha: isDark ? 0.3 : 0.1),
+        borderRadius: BorderRadius.circular(6),
+      ),
+      child: Text(
+        label,
+        style: TextStyle(
+          color: isDark ? color.withValues(alpha: 0.9) : color,
+          fontSize: 10,
+          fontWeight: FontWeight.w600,
+          fontFamily: 'GSansFlex',
         ),
       ),
     );
@@ -485,14 +487,15 @@ class _ScanResultBottomSheetState extends State<ScanResultBottomSheet> {
           ),
           elevation: 0,
         ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(icon, size: 18),
-            const SizedBox(width: 8),
-            Text(label, style: const TextStyle(fontWeight: FontWeight.w600)),
-          ],
-        ),
+        // child: Row(
+        //   mainAxisAlignment: MainAxisAlignment.center,
+        //   children: [
+        //     Icon(icon, size: 18),
+        //     const SizedBox(width: 8),
+        //     Text(label, style: const TextStyle(fontWeight: FontWeight.w600)),
+        //   ],
+        // ),
+        child: Icon(icon, size: 18),
       ),
     );
   }
@@ -548,9 +551,6 @@ class _ScanResultBottomSheetState extends State<ScanResultBottomSheet> {
 
   /// Returns the safety info for the link
   /// Checks if the link starts with https:// or http://
-  /// Returns green if the link starts with https://
-  /// Returns orange if the link starts with http://
-  /// Returns blue if the link starts with anything else
   _SafetyInfo _getSafetyInfo() {
     if (record.format == 'URL') {
       final isHttps = record.data.toLowerCase().startsWith('https://');

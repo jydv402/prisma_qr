@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:prisma_qr_app/widgets/history_item.dart';
 import '../controllers/history_controller.dart';
 import '../widgets/scan_result_bottom_sheet.dart';
 import 'package:timeago/timeago.dart' as timeago;
@@ -240,12 +241,14 @@ class _ScanSavedHistoryScreenState extends State<ScanSavedHistoryScreen> {
                   backgroundColor: Colors.transparent,
                 );
               },
-              child: _buildHistoryListItem(
-                context,
-                record.iconName,
-                record.title ?? 'Scan ${record.id.substring(0, 4)}',
-                record.data,
-                timeago.format(record.timestamp),
+              child: HistoryItem(
+                title: record.title ?? 'Scan ${record.id.substring(0, 4)}',
+                subtitle: record.data,
+                format: record.format,
+                type: record.type,
+                time: timeago.format(record.timestamp),
+                formatColor: Colors.green,
+                typeColor: Colors.blue,
               ),
             ),
           );
@@ -280,12 +283,14 @@ class _ScanSavedHistoryScreenState extends State<ScanSavedHistoryScreen> {
                   backgroundColor: Colors.transparent,
                 );
               },
-              child: _buildHistoryListItem(
-                context,
-                record.iconName,
-                record.title ?? 'Generated ${record.id.substring(0, 4)}',
-                record.data,
-                timeago.format(record.timestamp),
+              child: HistoryItem(
+                title: record.title ?? 'Generated ${record.id.substring(0, 4)}',
+                subtitle: record.data,
+                format: record.format,
+                type: record.type,
+                time: timeago.format(record.timestamp),
+                formatColor: Colors.green,
+                typeColor: Colors.blue,
               ),
             ),
           );

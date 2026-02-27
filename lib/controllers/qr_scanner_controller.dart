@@ -127,7 +127,7 @@ class QrScannerController extends GetxController {
           Get.snackbar(
             'Copied',
             'Data auto-copied to clipboard',
-            snackPosition: SnackPosition.TOP,
+            snackPosition: SnackPosition.BOTTOM,
             margin: EdgeInsets.fromLTRB(16, 16, 16, 16),
             icon: Icon(Icons.done_all_rounded),
           );

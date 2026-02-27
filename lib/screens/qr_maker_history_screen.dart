@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:prisma_qr_app/controllers/bottom_nav_controller.dart';
+import 'package:prisma_qr_app/widgets/history_item.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import '../controllers/qr_maker_controller.dart';
 import '../controllers/history_controller.dart';
@@ -151,14 +152,17 @@ class QrMakerHistoryScreen extends StatelessWidget {
                                 backgroundColor: Colors.transparent,
                               );
                             },
-                            child: _buildHistoryItem(
-                              context,
-                              record.title ??
-                                  'Generated ${record.id.substring(0, 4)}',
-                              record.data,
-                              record.format,
-                              timeago.format(record.timestamp),
-                              Colors.blue,
+                            child: HistoryItem(
+                              title:
+                                  record.title ??
+                                  'Generated ${record.id.substring(0, 4)}', // Main title of tile
+                              subtitle: record.data, // Data of the QR
+                              format: record.format, // Format of the QR
+                              type: record
+                                  .type, // Type of the QR, scanned or generated
+                              time: timeago.format(record.timestamp),
+                              formatColor: Colors.amber,
+                              typeColor: Colors.blue,
                             ),
                           ),
                         );
@@ -207,6 +211,7 @@ class QrMakerHistoryScreen extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
+            spacing: 12,
             children: [
               Container(
                 padding: const EdgeInsets.all(8),
@@ -220,9 +225,9 @@ class QrMakerHistoryScreen extends StatelessWidget {
                   size: 20,
                 ),
               ),
-              const SizedBox(width: 16),
+
               Text(
-                'New Code',
+                'Generate Code',
                 style: Theme.of(
                   context,
                 ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
@@ -372,6 +377,9 @@ class QrMakerHistoryScreen extends StatelessWidget {
     );
   }
 
+  /// Build type selector widget
+  /// Used in the QR maker screen
+  /// Build the small toggles for URL, Wi-Fi, Text, VCard
   Widget _buildTypeSelector(
     BuildContext context,
     String label,
@@ -425,118 +433,6 @@ class QrMakerHistoryScreen extends StatelessWidget {
             ),
           ],
         ),
-      ),
-    );
-  }
-
-  Widget _buildHistoryItem(
-    BuildContext context,
-    String title,
-    String subtitle,
-    String type,
-    String time,
-    Color tagColor,
-  ) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.surface,
-        borderRadius: BorderRadius.circular(24),
-        boxShadow: [
-          if (!isDark)
-            BoxShadow(
-              color: Colors.black.withValues(alpha: 0.02),
-              blurRadius: 10,
-              offset: const Offset(0, 2),
-            ),
-        ],
-      ),
-      child: Row(
-        children: [
-          Container(
-            width: 56,
-            height: 56,
-            decoration: BoxDecoration(
-              color: isDark ? Colors.white : Colors.grey[100],
-              borderRadius: BorderRadius.circular(12),
-            ),
-            padding: const EdgeInsets.all(4),
-            child: Center(
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(8),
-                child: QrImageView(
-                  data: title, // Data is passed as title
-                  version: QrVersions.auto,
-                  backgroundColor: Colors.white,
-                  padding: const EdgeInsets.all(2),
-                ),
-              ),
-            ),
-          ),
-          const SizedBox(width: 16),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  title,
-                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                    fontWeight: FontWeight.bold,
-                  ),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                Text(
-                  subtitle,
-                  style: Theme.of(context).textTheme.bodySmall,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                const SizedBox(height: 4),
-                Row(
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 8,
-                        vertical: 2,
-                      ),
-                      decoration: BoxDecoration(
-                        color: tagColor.withValues(alpha: isDark ? 0.3 : 0.1),
-                        borderRadius: BorderRadius.circular(6),
-                      ),
-                      child: Text(
-                        type,
-                        style: TextStyle(
-                          color: isDark
-                              ? tagColor.withValues(alpha: 0.9)
-                              : tagColor,
-                          fontSize: 10,
-                          fontWeight: FontWeight.w600,
-                          fontFamily: 'GSansFlex',
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 8),
-                    Text(
-                      time,
-                      style: TextStyle(
-                        color: Colors.grey[400],
-                        fontSize: 10,
-                        fontFamily: 'GSansFlex',
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-          IconButton(
-            icon: Icon(Icons.more_vert, color: Colors.grey[400]),
-            onPressed: () {},
-          ),
-        ],
       ),
     );
   }

@@ -2,6 +2,7 @@ import 'dart:convert';
 
 class QrCodeRecord {
   final String id;
+  final String? title;
   final String data;
   final String type; // 'scan' or 'generate'
   final String format; // 'URL', 'Wi-Fi', 'Text', 'Contact', 'Product', etc.
@@ -9,15 +10,35 @@ class QrCodeRecord {
 
   QrCodeRecord({
     required this.id,
+    this.title,
     required this.data,
     required this.type,
     required this.format,
     required this.timestamp,
   });
 
+  QrCodeRecord copyWith({
+    String? id,
+    String? title,
+    String? data,
+    String? type,
+    String? format,
+    DateTime? timestamp,
+  }) {
+    return QrCodeRecord(
+      id: id ?? this.id,
+      title: title ?? this.title,
+      data: data ?? this.data,
+      type: type ?? this.type,
+      format: format ?? this.format,
+      timestamp: timestamp ?? this.timestamp,
+    );
+  }
+
   Map<String, dynamic> toMap() {
     return {
       'id': id,
+      'title': title,
       'data': data,
       'type': type,
       'format': format,
@@ -28,6 +49,7 @@ class QrCodeRecord {
   factory QrCodeRecord.fromMap(Map<String, dynamic> map) {
     return QrCodeRecord(
       id: map['id'] ?? '',
+      title: map['title'],
       data: map['data'] ?? '',
       type: map['type'] ?? '',
       format: map['format'] ?? '',

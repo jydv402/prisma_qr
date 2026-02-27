@@ -4,12 +4,74 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:get/get.dart';
 import 'package:qr_flutter/qr_flutter.dart';
+import '../controllers/history_controller.dart';
 import '../models/qr_code_model.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
-class ScanResultBottomSheet extends StatelessWidget {
+class ScanResultBottomSheet extends StatefulWidget {
   final QrCodeRecord record;
   const ScanResultBottomSheet({super.key, required this.record});
+
+  @override
+  State<ScanResultBottomSheet> createState() => _ScanResultBottomSheetState();
+}
+
+class _ScanResultBottomSheetState extends State<ScanResultBottomSheet> {
+  late QrCodeRecord _currentRecord;
+  final TextEditingController _nameController = TextEditingController();
+
+  QrCodeRecord get record => _currentRecord;
+
+  @override
+  void initState() {
+    super.initState();
+    _currentRecord = widget.record;
+  }
+
+  @override
+  void dispose() {
+    _nameController.dispose();
+    super.dispose();
+  }
+
+  void _editName(BuildContext context) {
+    _nameController.text = _currentRecord.title ?? '';
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    Get.defaultDialog(
+      title: "Edit Name",
+      backgroundColor: isDark ? Colors.grey[900] : Colors.white,
+      titleStyle: TextStyle(color: isDark ? Colors.white : Colors.black),
+      content: TextField(
+        controller: _nameController,
+        style: TextStyle(color: isDark ? Colors.white : Colors.black),
+        decoration: InputDecoration(
+          hintText: "Enter a custom name",
+          hintStyle: TextStyle(
+            color: isDark ? Colors.grey[600] : Colors.grey[400],
+          ),
+        ),
+      ),
+      textConfirm: "Save",
+      textCancel: "Cancel",
+      confirmTextColor: isDark ? Colors.black : Colors.white,
+      cancelTextColor: isDark ? Colors.white : Colors.black,
+      buttonColor: isDark ? Colors.white : Colors.black,
+      onConfirm: () async {
+        final newTitle = _nameController.text.trim().isNotEmpty
+            ? _nameController.text.trim()
+            : null;
+        final updatedRecord = _currentRecord.copyWith(title: newTitle);
+        setState(() {
+          _currentRecord = updatedRecord;
+        });
+
+        if (Get.isRegistered<HistoryController>()) {
+          Get.find<HistoryController>().updateRecord(updatedRecord);
+        }
+        Get.back();
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -90,15 +152,56 @@ class ScanResultBottomSheet extends StatelessWidget {
                               fontSize: 12,
                             ),
                           ),
+                          const SizedBox(width: 8),
+                          Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 8,
+                              vertical: 4,
+                            ),
+                            decoration: BoxDecoration(
+                              color: Colors.blue.withValues(
+                                alpha: isDark ? 0.3 : 0.1,
+                              ),
+                              borderRadius: BorderRadius.circular(6),
+                            ),
+                            child: Text(
+                              record.type == 'scan' ? 'SCANNED' : 'GENERATED',
+                              style: TextStyle(
+                                color: isDark
+                                    ? Colors.blue[400]
+                                    : Colors.blue[600],
+                                fontSize: 10,
+                                fontWeight: FontWeight.bold,
+                                letterSpacing: 0.5,
+                              ),
+                            ),
+                          ),
                         ],
                       ),
                       const SizedBox(height: 8),
-                      Text(
-                        record.type == 'scan'
-                            ? 'Scanned Result'
-                            : 'Generated Code',
-                        style: Theme.of(context).textTheme.headlineMedium
-                            ?.copyWith(fontWeight: FontWeight.bold),
+                      GestureDetector(
+                        onTap: () => _editName(context),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Text(
+                              record.title ??
+                                  (record.type == 'scan'
+                                      ? 'Scan ${record.id.substring(0, 4)}'
+                                      : 'Generated ${record.id.substring(0, 4)}'),
+                              style: Theme.of(context).textTheme.headlineMedium
+                                  ?.copyWith(fontWeight: FontWeight.bold),
+                            ),
+                            const SizedBox(width: 8),
+                            Icon(
+                              Icons.edit,
+                              size: 20,
+                              color: isDark
+                                  ? Colors.grey[400]
+                                  : Colors.grey[600],
+                            ),
+                          ],
+                        ),
                       ),
                     ],
                   ),
@@ -185,6 +288,9 @@ class ScanResultBottomSheet extends StatelessWidget {
                         Get.snackbar(
                           'Copied',
                           'QR code data copied to clipboard',
+                          snackPosition: SnackPosition.TOP,
+                          margin: EdgeInsets.fromLTRB(16, 16, 16, 16),
+                          icon: Icon(Icons.done_all_rounded),
                         );
                       },
                     ),
@@ -239,7 +345,13 @@ class ScanResultBottomSheet extends StatelessWidget {
                               mode: LaunchMode.externalApplication,
                             );
                           } else {
-                            Get.snackbar('Error', 'Could not open URL');
+                            Get.snackbar(
+                              'Error',
+                              'Could not open URL',
+                              snackPosition: SnackPosition.TOP,
+                              margin: EdgeInsets.fromLTRB(16, 16, 16, 16),
+                              icon: Icon(Icons.error_outline_rounded),
+                            );
                           }
                         }
                       : null,
@@ -296,7 +408,9 @@ class ScanResultBottomSheet extends StatelessWidget {
                         Get.snackbar(
                           'Copied',
                           'Data copied to clipboard',
-                          snackPosition: SnackPosition.BOTTOM,
+                          snackPosition: SnackPosition.TOP,
+                          margin: EdgeInsets.fromLTRB(16, 16, 16, 16),
+                          icon: Icon(Icons.done_all_rounded),
                         );
                       },
                     ),

@@ -60,18 +60,21 @@ class ConfirmationBottomSheet extends StatelessWidget {
                   Expanded(
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        elevation: 0,
                         backgroundColor: isDark
-                            ? Colors.red.shade300
-                            : Colors.red.shade400,
+                            ? Colors.grey[800]
+                            : Colors.grey[100],
+                        foregroundColor: isDark ? Colors.white : Colors.black,
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
+                          borderRadius: BorderRadius.circular(16),
                         ),
+                        elevation: 0,
                       ),
                       onPressed: () => Get.back(),
-                      child: const Text(
+                      child: Text(
                         "Cancel",
-                        style: TextStyle(color: Colors.black),
+                        style: TextStyle(
+                          color: isDark ? Colors.white : Colors.black,
+                        ),
                       ),
                     ),
                   ),
@@ -80,20 +83,21 @@ class ConfirmationBottomSheet extends StatelessWidget {
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         elevation: 0,
-                        backgroundColor: isDark
-                            ? Colors.green.shade300
-                            : Colors.green.shade400,
+                        backgroundColor: isDark ? Colors.white : Colors.black,
+                        foregroundColor: isDark ? Colors.black : Colors.white,
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
+                          borderRadius: BorderRadius.circular(16),
                         ),
                       ),
                       onPressed: () {
                         onConfirm();
                         Get.back();
                       },
-                      child: const Text(
+                      child: Text(
                         "Confirm",
-                        style: TextStyle(color: Colors.black),
+                        style: TextStyle(
+                          color: isDark ? Colors.black : Colors.white,
+                        ),
                       ),
                     ),
                   ),

@@ -7,6 +7,7 @@ import '../widgets/scan_result_bottom_sheet.dart';
 
 class QrMakerController extends GetxController {
   final TextEditingController textController = TextEditingController();
+  final TextEditingController titleController = TextEditingController();
   final FocusNode focusNode = FocusNode();
   final HistoryController _historyController = Get.find();
   final _uuid = const Uuid();
@@ -17,6 +18,7 @@ class QrMakerController extends GetxController {
   @override
   void onClose() {
     textController.dispose();
+    titleController.dispose();
     super.onClose();
   }
 
@@ -30,11 +32,9 @@ class QrMakerController extends GetxController {
       Get.snackbar(
         'Error',
         'Please enter some data to generate a QR code.',
-        snackPosition: SnackPosition.BOTTOM,
+        snackPosition: SnackPosition.TOP,
         margin: EdgeInsets.fromLTRB(16, 16, 16, 16),
         icon: Icon(Icons.error_outline_rounded),
-        isDismissible: true,
-        shouldIconPulse: true,
       );
       return;
     }
@@ -54,6 +54,9 @@ class QrMakerController extends GetxController {
 
     final record = QrCodeRecord(
       id: _uuid.v4(),
+      title: titleController.text.trim().isNotEmpty
+          ? titleController.text.trim()
+          : null,
       data: data,
       type: 'generate',
       format: selectedType.value,
@@ -72,5 +75,6 @@ class QrMakerController extends GetxController {
     );
 
     textController.clear();
+    titleController.clear();
   }
 }

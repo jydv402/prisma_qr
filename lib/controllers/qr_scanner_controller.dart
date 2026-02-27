@@ -1,6 +1,6 @@
 import 'package:get/get.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
-import 'package:flutter_vibrate/flutter_vibrate.dart';
+
 import '../models/qr_code_model.dart';
 import 'history_controller.dart';
 import 'package:uuid/uuid.dart';
@@ -8,13 +8,14 @@ import '../widgets/scan_result_bottom_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'settings_controller.dart';
+import 'bottom_nav_controller.dart';
 
 class QrScannerController extends GetxController {
-  // Initialize the mobile scanner controller from the MobileScanner package
   final MobileScannerController mobileController = MobileScannerController(
     detectionSpeed: DetectionSpeed.normal,
     facing: CameraFacing.back,
     torchEnabled: false,
+    autoStart: false,
   );
 
   // Observable variables
@@ -25,6 +26,36 @@ class QrScannerController extends GetxController {
   final HistoryController _historyController = Get.find();
   final SettingsController _settingsController = Get.find();
   final _uuid = const Uuid();
+
+  @override
+  void onInit() {
+    super.onInit();
+
+    // Listen to tab changes to pause/resume the camera and save resources
+    if (Get.isRegistered<BottomNavController>()) {
+      final BottomNavController bottomNavController = Get.find();
+
+      // Check initial state on app launch and start the camera if we default to the scanner tab
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (bottomNavController.currentIndex.value == 0) {
+          resumeScanning();
+        } else {
+          isScanning.value = false;
+        }
+      });
+
+      ever(bottomNavController.currentIndex, (int index) {
+        if (index == 0) {
+          // Navigated back to Scanner tab
+          resumeScanning();
+        } else {
+          // Navigated away from Scanner tab
+          isScanning.value = false;
+          mobileController.stop();
+        }
+      });
+    }
+  }
 
   // Dispose the controller when the screen is closed
   @override
@@ -55,10 +86,7 @@ class QrScannerController extends GetxController {
 
         // Feed back
         if (_settingsController.hapticFeedback.value) {
-          bool canVibrate = await Vibrate.canVibrate;
-          if (canVibrate) {
-            Vibrate.feedback(FeedbackType.success);
-          }
+          // Placeholder for vibration
         }
 
         if (_settingsController.scanSounds.value) {
@@ -92,6 +120,8 @@ class QrScannerController extends GetxController {
             'Copied',
             'Data auto-copied to clipboard',
             snackPosition: SnackPosition.TOP,
+            margin: EdgeInsets.fromLTRB(16, 16, 16, 16),
+            icon: Icon(Icons.done_all_rounded),
           );
         }
 

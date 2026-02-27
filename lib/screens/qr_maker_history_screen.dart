@@ -146,11 +146,14 @@ class QrMakerHistoryScreen extends StatelessWidget {
                             },
                             child: _buildHistoryItem(
                               context,
-                              record.data, // using data as title for now
-                              record.type,
+                              record.title ??
+                                  (record.type == 'scan'
+                                      ? 'Scan ${record.id.substring(0, 4)}'
+                                      : 'Generated ${record.id.substring(0, 4)}'),
+                              record.data,
                               record.format,
                               timeago.format(record.timestamp),
-                              Colors.blue, // Dynamic colors can be added later
+                              Colors.blue,
                             ),
                           ),
                         );
@@ -211,7 +214,7 @@ class QrMakerHistoryScreen extends StatelessWidget {
           ),
           const SizedBox(height: 24),
 
-          // Input Field
+          // Input Field (Data)
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
             decoration: BoxDecoration(
@@ -224,6 +227,24 @@ class QrMakerHistoryScreen extends StatelessWidget {
               decoration: InputDecoration(
                 icon: Icon(Icons.link, color: Colors.grey[400]),
                 hintText: 'Enter website URL or text',
+                border: InputBorder.none,
+                hintStyle: TextStyle(color: Colors.grey[400]),
+              ),
+            ),
+          ),
+          const SizedBox(height: 12),
+          // Input Field (Title)
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+            decoration: BoxDecoration(
+              color: isDark ? Colors.grey[800] : Colors.grey[50],
+              borderRadius: BorderRadius.circular(16),
+            ),
+            child: TextField(
+              controller: controller.titleController,
+              decoration: InputDecoration(
+                icon: Icon(Icons.title, color: Colors.grey[400]),
+                hintText: 'Name (Optional)',
                 border: InputBorder.none,
                 hintStyle: TextStyle(color: Colors.grey[400]),
               ),

@@ -47,7 +47,7 @@ class _ScanSavedHistoryScreenState extends State<ScanSavedHistoryScreen> {
                             ?.copyWith(fontWeight: FontWeight.bold),
                       ),
                       Text(
-                        'Scan and Saved history',
+                        'Scanned & Saved history',
                         style: TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.w500,
@@ -219,7 +219,10 @@ class _ScanSavedHistoryScreenState extends State<ScanSavedHistoryScreen> {
               child: _buildHistoryListItem(
                 context,
                 record.iconName,
-                record.format,
+                record.title ??
+                    (record.type == 'scan'
+                        ? 'Scan ${record.id.substring(0, 4)}'
+                        : 'Generated ${record.id.substring(0, 4)}'),
                 record.data,
                 timeago.format(record.timestamp),
               ),
@@ -259,7 +262,10 @@ class _ScanSavedHistoryScreenState extends State<ScanSavedHistoryScreen> {
               child: _buildHistoryListItem(
                 context,
                 record.iconName,
-                record.format,
+                record.title ??
+                    (record.type == 'scan'
+                        ? 'Scan ${record.id.substring(0, 4)}'
+                        : 'Generated ${record.id.substring(0, 4)}'),
                 record.data,
                 timeago.format(record.timestamp),
               ),

@@ -9,12 +9,16 @@ class QrDisplayScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Get the theme data
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final bgColor = Theme.of(context).scaffoldBackgroundColor;
 
+    // Get the arguments from the directed page
     final record = Get.arguments as QrCodeRecord;
 
-    final size = MediaQuery.of(context).size.width;
+    // Ontain the screen size
+    final size = Get.width;
+
     return Scaffold(
       backgroundColor: bgColor,
       appBar: AppBar(

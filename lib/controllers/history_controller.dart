@@ -29,9 +29,50 @@ class HistoryController extends GetxController {
 
   Future<void> addRecord(QrCodeRecord record) async {
     if (record.type == 'scan') {
-      scannedHistory.insert(0, record);
+      int index = scannedHistory.indexWhere((r) => r.data == record.data);
+      if (index != -1) {
+        var existing = scannedHistory[index];
+        scannedHistory.removeAt(index);
+        scannedHistory.insert(
+          0,
+          existing.copyWith(
+            timestamp: record.timestamp,
+            title: record.title ?? existing.title,
+          ),
+        );
+      } else {
+        scannedHistory.insert(0, record);
+      }
     } else {
-      generatedHistory.insert(0, record);
+      int index = generatedHistory.indexWhere((r) => r.data == record.data);
+      if (index != -1) {
+        var existing = generatedHistory[index];
+        generatedHistory.removeAt(index);
+        generatedHistory.insert(
+          0,
+          existing.copyWith(
+            timestamp: record.timestamp,
+            title: record.title ?? existing.title,
+          ),
+        );
+      } else {
+        generatedHistory.insert(0, record);
+      }
+    }
+    await _saveCurrentState();
+  }
+
+  Future<void> updateRecord(QrCodeRecord updatedRecord) async {
+    if (updatedRecord.type == 'scan') {
+      int index = scannedHistory.indexWhere((r) => r.id == updatedRecord.id);
+      if (index != -1) {
+        scannedHistory[index] = updatedRecord;
+      }
+    } else {
+      int index = generatedHistory.indexWhere((r) => r.id == updatedRecord.id);
+      if (index != -1) {
+        generatedHistory[index] = updatedRecord;
+      }
     }
     await _saveCurrentState();
   }

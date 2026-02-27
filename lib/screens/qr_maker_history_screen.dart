@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:prisma_qr_app/controllers/bottom_nav_controller.dart';
 import 'package:prisma_qr_app/widgets/history_item.dart';
-import 'package:qr_flutter/qr_flutter.dart';
 import '../controllers/qr_maker_controller.dart';
 import '../controllers/history_controller.dart';
 import '../widgets/scan_result_bottom_sheet.dart';

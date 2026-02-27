@@ -364,12 +364,13 @@ class SettingsScreen extends StatelessWidget {
           Switch(
             value: value,
             onChanged: onChanged,
-            activeColor: Theme.of(
-              context,
-            ).colorScheme.primary, // Black in light mode, primary in dark
+            activeThumbColor: Colors.white,
             activeTrackColor: isDark
                 ? Theme.of(context).colorScheme.primary.withValues(alpha: 0.5)
                 : Colors.black.withValues(alpha: 0.2),
+            thumbIcon: WidgetStatePropertyAll(
+              Icon(value ? Icons.check : Icons.close, color: Colors.black),
+            ),
           ),
         ],
       ),

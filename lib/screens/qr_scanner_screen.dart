@@ -181,19 +181,23 @@ class QrScannerScreen extends StatelessWidget {
     const BorderSide b = BorderSide(color: Colors.white, width: 4);
     if (alignment == Alignment.topLeft) return const Border(top: b, left: b);
     if (alignment == Alignment.topRight) return const Border(top: b, right: b);
-    if (alignment == Alignment.bottomLeft)
+    if (alignment == Alignment.bottomLeft) {
       return const Border(bottom: b, left: b);
+    }
     return const Border(bottom: b, right: b); // bottomRight
   }
 
   BorderRadius _getBorderRadius(Alignment alignment) {
     const r = Radius.circular(12);
-    if (alignment == Alignment.topLeft)
+    if (alignment == Alignment.topLeft) {
       return const BorderRadius.only(topLeft: r);
-    if (alignment == Alignment.topRight)
+    }
+    if (alignment == Alignment.topRight) {
       return const BorderRadius.only(topRight: r);
-    if (alignment == Alignment.bottomLeft)
+    }
+    if (alignment == Alignment.bottomLeft) {
       return const BorderRadius.only(bottomLeft: r);
+    }
     return const BorderRadius.only(bottomRight: r);
   }
 

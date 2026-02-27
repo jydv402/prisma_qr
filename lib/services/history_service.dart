@@ -27,7 +27,7 @@ class HistoryService {
       final List<dynamic> jsonList = json.decode(contents);
       return jsonList.map((json) => QrCodeRecord.fromMap(json)).toList();
     } catch (e) {
-      print('Error loading history: $e');
+      // print('Error loading history: $e');
       return [];
     }
   }
@@ -39,7 +39,7 @@ class HistoryService {
       final jsonList = history.map((record) => record.toMap()).toList();
       await file.writeAsString(json.encode(jsonList));
     } catch (e) {
-      print('Error saving history: $e');
+      // print('Error saving history: $e');
     }
   }
 
@@ -49,7 +49,7 @@ class HistoryService {
       final file = await _file;
       await file.writeAsString('[]');
     } catch (e) {
-      print('Error clearing history: $e');
+      // print('Error clearing history: $e');
     }
   }
 
@@ -60,7 +60,7 @@ class HistoryService {
       history.removeWhere((record) => record.id == id);
       await saveHistory(history);
     } catch (e) {
-      print('Error deleting record: $e');
+      // print('Error deleting record: $e');
     }
   }
 }

@@ -17,18 +17,3 @@ flutter_launcher_icons:
   image_path_ios_tinted_grayscale: "assets/branding/prisma_mono.png"
   desaturate_tinted_to_grayscale_ios: true
   background_color_ios: "#FFFFFF"
-
-  web:
-    generate: true
-    image_path: "assets/branding/prisma_branding.png"
-    background_color: "#FFFFFF"
-    theme_color: "#ECF4E8"
-
-  windows:
-    generate: true
-    image_path: "assets/branding/prisma_branding.png"
-    icon_size: 48 # min:48, max:256, default: 48
-
-  macos:
-    generate: true
-    image_path: "assets/branding/prisma_branding.png"

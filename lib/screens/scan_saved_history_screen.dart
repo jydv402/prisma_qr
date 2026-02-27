@@ -50,6 +50,7 @@ class _ScanSavedHistoryScreenState extends State<ScanSavedHistoryScreen> {
                         style: TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.w500,
+                          fontFamily: 'GSansFlex',
                         ),
                       ),
                     ],
@@ -131,6 +132,7 @@ class _ScanSavedHistoryScreenState extends State<ScanSavedHistoryScreen> {
                                     'Scanned',
                                     style: TextStyle(
                                       fontWeight: FontWeight.bold,
+                                      fontFamily: 'GSansFlex',
                                       color: _isScannedTab
                                           ? (isDark
                                                 ? Colors.black
@@ -172,6 +174,7 @@ class _ScanSavedHistoryScreenState extends State<ScanSavedHistoryScreen> {
                                     'Generated',
                                     style: TextStyle(
                                       fontWeight: FontWeight.bold,
+                                      fontFamily: 'GSansFlex',
                                       color: !_isScannedTab
                                           ? (isDark
                                                 ? Colors.black
@@ -358,6 +361,7 @@ class _ScanSavedHistoryScreenState extends State<ScanSavedHistoryScreen> {
                   style: const TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 16,
+                    fontFamily: 'GSansFlex',
                   ),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
@@ -367,6 +371,7 @@ class _ScanSavedHistoryScreenState extends State<ScanSavedHistoryScreen> {
                   style: TextStyle(
                     color: isDark ? Colors.grey[400] : Colors.grey[600],
                     fontSize: 12,
+                    fontFamily: 'GSansFlex',
                   ),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
@@ -383,6 +388,7 @@ class _ScanSavedHistoryScreenState extends State<ScanSavedHistoryScreen> {
                   color: isDark ? Colors.grey[400] : Colors.grey[500],
                   fontSize: 12,
                   fontWeight: FontWeight.w500,
+                  fontFamily: 'GSansFlex',
                 ),
               ),
               const SizedBox(height: 4),

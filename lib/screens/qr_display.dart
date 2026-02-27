@@ -27,6 +27,7 @@ class QrDisplayScreen extends StatelessWidget {
           style: TextStyle(
             color: isDark ? Colors.white : Colors.black,
             fontWeight: FontWeight.bold,
+            fontFamily: 'GSansFlex',
           ),
         ),
         centerTitle: true,

@@ -47,6 +47,7 @@ class QrMakerHistoryScreen extends StatelessWidget {
                         style: TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.w500,
+                          fontFamily: 'GSansFlex',
                         ),
                       ),
                     ],
@@ -109,6 +110,7 @@ class QrMakerHistoryScreen extends StatelessWidget {
                           style: TextStyle(
                             color: isDark ? Colors.grey[400] : Colors.grey[600],
                             fontWeight: FontWeight.w500,
+                            fontFamily: 'GSansFlex',
                           ),
                         ),
                       ),
@@ -125,7 +127,10 @@ class QrMakerHistoryScreen extends StatelessWidget {
                         child: Center(
                           child: Text(
                             'No generated QR codes yet.',
-                            style: TextStyle(color: Colors.grey[500]),
+                            style: TextStyle(
+                              color: Colors.grey[500],
+                              fontFamily: 'GSansFlex',
+                            ),
                           ),
                         ),
                       );
@@ -166,7 +171,10 @@ class QrMakerHistoryScreen extends StatelessWidget {
                       historyController.generatedHistory.length > 3)
                     const Text(
                       'Only the last 3 history items are shown here.',
-                      style: TextStyle(color: Colors.grey),
+                      style: TextStyle(
+                        color: Colors.grey,
+                        fontFamily: 'GSansFlex',
+                      ),
                       textAlign: .center,
                     ),
                 ],
@@ -237,7 +245,10 @@ class QrMakerHistoryScreen extends StatelessWidget {
                 icon: Icon(Icons.link, color: Colors.grey[400]),
                 hintText: 'Enter website URL or text',
                 border: InputBorder.none,
-                hintStyle: TextStyle(color: Colors.grey[400]),
+                hintStyle: TextStyle(
+                  color: Colors.grey[400],
+                  fontFamily: 'GSansFlex',
+                ),
               ),
             ),
           ),
@@ -257,7 +268,10 @@ class QrMakerHistoryScreen extends StatelessWidget {
                 icon: Icon(Icons.title, color: Colors.grey[400]),
                 hintText: 'Name (Optional)',
                 border: InputBorder.none,
-                hintStyle: TextStyle(color: Colors.grey[400]),
+                hintStyle: TextStyle(
+                  color: Colors.grey[400],
+                  fontFamily: 'GSansFlex',
+                ),
               ),
             ),
           ),
@@ -343,6 +357,7 @@ class QrMakerHistoryScreen extends StatelessWidget {
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
+                        fontFamily: 'GSansFlex',
                       ),
                     ),
                     SizedBox(width: 8),
@@ -405,6 +420,7 @@ class QrMakerHistoryScreen extends StatelessWidget {
                 color: iconColor,
                 fontSize: 10,
                 fontWeight: FontWeight.w500,
+                fontFamily: 'GSansFlex',
               ),
             ),
           ],
@@ -498,13 +514,18 @@ class QrMakerHistoryScreen extends StatelessWidget {
                               : tagColor,
                           fontSize: 10,
                           fontWeight: FontWeight.w600,
+                          fontFamily: 'GSansFlex',
                         ),
                       ),
                     ),
                     const SizedBox(width: 8),
                     Text(
                       time,
-                      style: TextStyle(color: Colors.grey[400], fontSize: 10),
+                      style: TextStyle(
+                        color: Colors.grey[400],
+                        fontSize: 10,
+                        fontFamily: 'GSansFlex',
+                      ),
                     ),
                   ],
                 ),

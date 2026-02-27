@@ -39,6 +39,9 @@ class _ScanResultBottomSheetState extends State<ScanResultBottomSheet> {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     Get.defaultDialog(
       title: "Edit Name",
+      radius: 32,
+      titlePadding: const EdgeInsets.only(top: 24),
+      contentPadding: const EdgeInsets.fromLTRB(32, 12, 32, 24),
       backgroundColor: isDark ? Colors.grey[900] : Colors.white,
       titleStyle: TextStyle(color: isDark ? Colors.white : Colors.black),
       content: TextField(
@@ -143,16 +146,6 @@ class _ScanResultBottomSheetState extends State<ScanResultBottomSheet> {
                             ),
                           ),
                           const SizedBox(width: 8),
-                          Text(
-                            timeago.format(record.timestamp),
-                            style: TextStyle(
-                              color: isDark
-                                  ? Colors.grey[500]
-                                  : Colors.grey[400],
-                              fontSize: 12,
-                            ),
-                          ),
-                          const SizedBox(width: 8),
                           Container(
                             padding: const EdgeInsets.symmetric(
                               horizontal: 8,
@@ -174,6 +167,16 @@ class _ScanResultBottomSheetState extends State<ScanResultBottomSheet> {
                                 fontWeight: FontWeight.bold,
                                 letterSpacing: 0.5,
                               ),
+                            ),
+                          ),
+                          const SizedBox(width: 8),
+                          Text(
+                            timeago.format(record.timestamp),
+                            style: TextStyle(
+                              color: isDark
+                                  ? Colors.grey[500]
+                                  : Colors.grey[400],
+                              fontSize: 12,
                             ),
                           ),
                         ],

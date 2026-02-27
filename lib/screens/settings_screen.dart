@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:prisma_qr_app/controllers/history_controller.dart';
 import 'package:prisma_qr_app/widgets/confirmation_bottom_sheet.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../controllers/settings_controller.dart';
 
 class SettingsScreen extends StatelessWidget {
@@ -34,6 +35,7 @@ class SettingsScreen extends StatelessWidget {
           style: TextStyle(
             color: isDark ? Colors.white : Colors.black,
             fontWeight: FontWeight.bold,
+            fontFamily: 'GSansFlex',
           ),
         ),
         centerTitle: true,
@@ -83,7 +85,7 @@ class SettingsScreen extends StatelessWidget {
                 ),
                 const SizedBox(height: 12),
                 Text(
-                  'The simplest way to scan, create, and manage your QR codes. Fast, secure, and privacy-focused.',
+                  'The simplest way to scan, create, and manage QR codes. Fast, secure, and privacy-focused.',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     color: isDark ? Colors.grey[400] : Colors.grey[600],
@@ -191,32 +193,62 @@ class SettingsScreen extends StatelessWidget {
                   onTap: () => Get.bottomSheet(
                     ConfirmationBottomSheet(
                       header: "Clear History",
-                      message: "Are you sure you want to clear your history?",
+                      message:
+                          "Are you sure you want to clear your history?\n\nThis clears all scanned and generated QR data and is irreversible.",
                       onConfirm: () =>
                           Get.find<HistoryController>().clearHistory(),
                     ),
                   ),
                 ),
-                _buildDivider(context),
-                _buildNavigationRow(
-                  context,
-                  icon: Icons.star_rounded,
-                  label: 'Star the project',
-                  onTap: () => Get.bottomSheet(
-                    ConfirmationBottomSheet(
-                      header: "Star the project",
-                      message:
-                          "If you like Prisma QR, please consider giving it a star on GitHub and support the project!\n\nConfirm to proceed to GitHub?",
-                      onConfirm: () {},
-                    ),
-                  ),
-                ),
+                // TODO: Implement export and import history
+                // _buildDivider(context),
+                // _buildNavigationRow(
+                //   context,
+                //   icon: Icons.file_download_rounded,
+                //   label: 'Export to JSON',
+                //   onTap: () => Get.bottomSheet(
+                //     ConfirmationBottomSheet(
+                //       header: "Export to JSON",
+                //       message:
+                //           "Are you sure you want to export your history to JSON?",
+                //       onConfirm: () {},
+                //     ),
+                //   ),
+                // ),
+                // _buildDivider(context),
+                // _buildNavigationRow(
+                //   context,
+                //   icon: Icons.file_download_rounded,
+                //   label: 'Export to CSV',
+                //   onTap: () => Get.bottomSheet(
+                //     ConfirmationBottomSheet(
+                //       header: "Export to CSV",
+                //       message:
+                //           "Are you sure you want to export your history to CSV?",
+                //       onConfirm: () {},
+                //     ),
+                //   ),
+                // ),
+                // _buildDivider(context),
+                // _buildNavigationRow(
+                //   context,
+                //   icon: Icons.upload_file,
+                //   label: 'Import from JSON',
+                //   onTap: () => Get.bottomSheet(
+                //     ConfirmationBottomSheet(
+                //       header: "Import from JSON",
+                //       message:
+                //           "Are you sure you want to import your history from JSON?",
+                //       onConfirm: () {},
+                //     ),
+                //   ),
+                // ),
               ],
             ),
           ),
           const SizedBox(height: 32),
 
-          // Data Settings
+          // Support Settings
           _buildSectionHeader(context, 'Support'),
           Container(
             decoration: BoxDecoration(
@@ -233,20 +265,27 @@ class SettingsScreen extends StatelessWidget {
             ),
             child: Column(
               children: [
-                _buildNavigationRow(
-                  context,
-                  icon: Icons.upload_rounded,
-                  label: 'Check for updates',
-                  onTap: () => Get.bottomSheet(
-                    ConfirmationBottomSheet(
-                      header: "Check for updates",
-                      message:
-                          "This feature is not available yet. Please check back later.",
-                      onConfirm: () {},
-                    ),
-                  ),
-                ),
-                _buildDivider(context),
+                // TODO: Implement check for updates
+                // _buildNavigationRow(
+                //   context,
+                //   icon: Icons.upload_rounded,
+                //   label: 'Check for updates',
+                //   onTap: () => Get.bottomSheet(
+                //     ConfirmationBottomSheet(
+                //       header: "Check for updates",
+                //       message:
+                //           "This feature is not available yet. Please check back later.\n\nHowever you could check the latest release on GitHub releases page.\n\nConfirm to proceed to GitHub releases?",
+                //       onConfirm: () {
+                //         launchUrl(
+                //           Uri.parse(
+                //             "https://github.com/jydv402/prisma_qr/releases",
+                //           ),
+                //         );
+                //       },
+                //     ),
+                //   ),
+                // ),
+                // _buildDivider(context),
                 _buildNavigationRow(
                   context,
                   icon: Icons.star_rounded,
@@ -255,8 +294,12 @@ class SettingsScreen extends StatelessWidget {
                     ConfirmationBottomSheet(
                       header: "Star the project",
                       message:
-                          "If you like Prisma QR, please consider giving it a star on GitHub and support the project!\n\nConfirm to proceed to GitHub?",
-                      onConfirm: () {},
+                          "If you like Prisma QR, please consider giving it a star on GitHub and support the project!\n\nAlso helps you to get latest updates about the project.\n\nConfirm to proceed to GitHub?",
+                      onConfirm: () {
+                        launchUrl(
+                          Uri.parse("https://github.com/jydv402/prisma_qr"),
+                        );
+                      },
                     ),
                   ),
                 ),

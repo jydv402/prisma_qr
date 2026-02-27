@@ -132,8 +132,8 @@ class QrMakerHistoryScreen extends StatelessWidget {
                     }
 
                     return Column(
-                      // Show only 2 of the previous history items
-                      children: historyController.generatedHistory.take(2).map((
+                      // Show only 3 of the previous history items
+                      children: historyController.generatedHistory.take(3).map((
                         record,
                       ) {
                         return Padding(
@@ -162,11 +162,13 @@ class QrMakerHistoryScreen extends StatelessWidget {
                   }),
 
                   // Text to inform this only shows the last 2 history items
-                  const Text(
-                    'Only the last 2 history items are shown here.',
-                    style: TextStyle(color: Colors.grey),
-                    textAlign: .center,
-                  ),
+                  if (historyController.generatedHistory.isNotEmpty &&
+                      historyController.generatedHistory.length > 3)
+                    const Text(
+                      'Only the last 3 history items are shown here.',
+                      style: TextStyle(color: Colors.grey),
+                      textAlign: .center,
+                    ),
                 ],
               ),
             ),

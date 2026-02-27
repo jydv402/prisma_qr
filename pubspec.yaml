@@ -9,8 +9,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_ringtone_player: ^4.0.0+4
   get: ^4.7.3
-  google_fonts: ^8.0.2
   mobile_scanner: ^7.2.0
   path_provider: ^2.1.5
   qr_flutter: ^4.1.0
@@ -19,6 +19,7 @@ dependencies:
   timeago: ^3.7.1
   url_launcher: ^6.3.2
   uuid: ^4.5.3
+  vibration: ^3.1.7
 
 dev_dependencies:
   flutter_test:
@@ -31,6 +32,21 @@ flutter:
   uses-material-design: true
   assets:
     - assets/branding/
+    - assets/sounds/
+    
+  fonts:
+    - family: DMSans
+      fonts:
+        - asset: assets/fonts/DMSans-Bold.ttf
+          weight: 700
+    - family: GSansFlex
+      fonts:
+        - asset: assets/fonts/GSansFlex-Regular.ttf
+          weight: 400
+        - asset: assets/fonts/GSansFlex-Medium.ttf
+          weight: 500
+        - asset: assets/fonts/GSansFlex-SemiBold.ttf
+          weight: 600
 
 package_rename_config:
   android:

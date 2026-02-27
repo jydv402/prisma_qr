@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 class AppTheme {
   // Common Colors
@@ -38,55 +37,67 @@ class AppTheme {
         secondary: accentBlue,
         surface: cardLight,
       ),
-      textTheme: TextTheme(
-        displayLarge: GoogleFonts.dmSans(
+      textTheme: const TextTheme(
+        displayLarge: TextStyle(
+          fontFamily: 'DMSans',
           color: textMainLight,
           fontWeight: FontWeight.bold,
         ),
-        displayMedium: GoogleFonts.dmSans(
+        displayMedium: TextStyle(
+          fontFamily: 'DMSans',
           color: textMainLight,
           fontWeight: FontWeight.bold,
         ),
-        displaySmall: GoogleFonts.dmSans(
+        displaySmall: TextStyle(
+          fontFamily: 'DMSans',
           color: textMainLight,
           fontWeight: FontWeight.bold,
         ),
-        headlineLarge: GoogleFonts.dmSans(
+        headlineLarge: TextStyle(
+          fontFamily: 'DMSans',
           color: textMainLight,
           fontWeight: FontWeight.bold,
         ),
-        headlineMedium: GoogleFonts.dmSans(
+        headlineMedium: TextStyle(
+          fontFamily: 'DMSans',
           color: textMainLight,
           fontWeight: FontWeight.bold,
         ),
-        headlineSmall: GoogleFonts.dmSans(
+        headlineSmall: TextStyle(
+          fontFamily: 'DMSans',
           color: textMainLight,
           fontWeight: FontWeight.bold,
         ),
-        titleLarge: GoogleFonts.dmSans(
+        titleLarge: TextStyle(
+          fontFamily: 'DMSans',
           color: textMainLight,
           fontWeight: FontWeight.bold,
         ),
-        titleMedium: GoogleFonts.dmSans(
+        titleMedium: TextStyle(
+          fontFamily: 'DMSans',
           color: textMainLight,
           fontWeight: FontWeight.bold,
         ),
-        titleSmall: GoogleFonts.dmSans(
+        titleSmall: TextStyle(
+          fontFamily: 'DMSans',
           color: textMainLight,
           fontWeight: FontWeight.bold,
         ),
-        bodyLarge: GoogleFonts.inter(color: textMainLight),
-        bodyMedium: GoogleFonts.inter(color: textMainLight),
-        bodySmall: GoogleFonts.inter(color: textSubLight),
-        labelLarge: GoogleFonts.inter(
+        bodyLarge: TextStyle(fontFamily: 'GSansFlex', color: textMainLight),
+        bodyMedium: TextStyle(fontFamily: 'GSansFlex', color: textMainLight),
+        bodySmall: TextStyle(fontFamily: 'GSansFlex', color: textSubLight),
+        labelLarge: TextStyle(
+          fontFamily: 'GSansFlex',
           color: textMainLight,
           fontWeight: FontWeight.w600,
         ),
-        labelMedium: GoogleFonts.inter(
+        labelMedium: TextStyle(
+          fontFamily: 'GSansFlex',
           color: textMainLight,
           fontWeight: FontWeight.w500,
         ),
-        labelSmall: GoogleFonts.inter(
+        labelSmall: TextStyle(
+          fontFamily: 'GSansFlex',
           color: textSubLight,
           fontWeight: FontWeight.w500,
         ),
@@ -105,55 +116,67 @@ class AppTheme {
         secondary: accentBlue,
         surface: cardDark,
       ),
-      textTheme: TextTheme(
-        displayLarge: GoogleFonts.dmSans(
+      textTheme: const TextTheme(
+        displayLarge: TextStyle(
+          fontFamily: 'DMSans',
           color: textMainDark,
           fontWeight: FontWeight.bold,
         ),
-        displayMedium: GoogleFonts.dmSans(
+        displayMedium: TextStyle(
+          fontFamily: 'DMSans',
           color: textMainDark,
           fontWeight: FontWeight.bold,
         ),
-        displaySmall: GoogleFonts.dmSans(
+        displaySmall: TextStyle(
+          fontFamily: 'DMSans',
           color: textMainDark,
           fontWeight: FontWeight.bold,
         ),
-        headlineLarge: GoogleFonts.dmSans(
+        headlineLarge: TextStyle(
+          fontFamily: 'DMSans',
           color: textMainDark,
           fontWeight: FontWeight.bold,
         ),
-        headlineMedium: GoogleFonts.dmSans(
+        headlineMedium: TextStyle(
+          fontFamily: 'DMSans',
           color: textMainDark,
           fontWeight: FontWeight.bold,
         ),
-        headlineSmall: GoogleFonts.dmSans(
+        headlineSmall: TextStyle(
+          fontFamily: 'DMSans',
           color: textMainDark,
           fontWeight: FontWeight.bold,
         ),
-        titleLarge: GoogleFonts.dmSans(
+        titleLarge: TextStyle(
+          fontFamily: 'DMSans',
           color: textMainDark,
           fontWeight: FontWeight.bold,
         ),
-        titleMedium: GoogleFonts.dmSans(
+        titleMedium: TextStyle(
+          fontFamily: 'DMSans',
           color: textMainDark,
           fontWeight: FontWeight.bold,
         ),
-        titleSmall: GoogleFonts.dmSans(
+        titleSmall: TextStyle(
+          fontFamily: 'DMSans',
           color: textMainDark,
           fontWeight: FontWeight.bold,
         ),
-        bodyLarge: GoogleFonts.inter(color: textMainDark),
-        bodyMedium: GoogleFonts.inter(color: textMainDark),
-        bodySmall: GoogleFonts.inter(color: textSubDark),
-        labelLarge: GoogleFonts.inter(
+        bodyLarge: TextStyle(fontFamily: 'GSansFlex', color: textMainDark),
+        bodyMedium: TextStyle(fontFamily: 'GSansFlex', color: textMainDark),
+        bodySmall: TextStyle(fontFamily: 'GSansFlex', color: textSubDark),
+        labelLarge: TextStyle(
+          fontFamily: 'GSansFlex',
           color: textMainDark,
           fontWeight: FontWeight.w600,
         ),
-        labelMedium: GoogleFonts.inter(
+        labelMedium: TextStyle(
+          fontFamily: 'GSansFlex',
           color: textMainDark,
           fontWeight: FontWeight.w500,
         ),
-        labelSmall: GoogleFonts.inter(
+        labelSmall: TextStyle(
+          fontFamily: 'GSansFlex',
           color: textSubDark,
           fontWeight: FontWeight.w500,
         ),

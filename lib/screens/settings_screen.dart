@@ -200,9 +200,65 @@ class SettingsScreen extends StatelessWidget {
                 _buildDivider(context),
                 _buildNavigationRow(
                   context,
-                  icon: Icons.privacy_tip,
-                  label: 'Privacy Policy',
-                  onTap: () {},
+                  icon: Icons.star_rounded,
+                  label: 'Star the project',
+                  onTap: () => Get.bottomSheet(
+                    ConfirmationBottomSheet(
+                      header: "Star the project",
+                      message:
+                          "If you like Prisma QR, please consider giving it a star on GitHub and support the project!\n\nConfirm to proceed to GitHub?",
+                      onConfirm: () {},
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 32),
+
+          // Data Settings
+          _buildSectionHeader(context, 'Support'),
+          Container(
+            decoration: BoxDecoration(
+              color: Theme.of(context).colorScheme.surface,
+              borderRadius: BorderRadius.circular(24),
+              boxShadow: [
+                if (!isDark)
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: 0.02),
+                    blurRadius: 10,
+                    offset: const Offset(0, 2),
+                  ),
+              ],
+            ),
+            child: Column(
+              children: [
+                _buildNavigationRow(
+                  context,
+                  icon: Icons.upload_rounded,
+                  label: 'Check for updates',
+                  onTap: () => Get.bottomSheet(
+                    ConfirmationBottomSheet(
+                      header: "Check for updates",
+                      message:
+                          "This feature is not available yet. Please check back later.",
+                      onConfirm: () {},
+                    ),
+                  ),
+                ),
+                _buildDivider(context),
+                _buildNavigationRow(
+                  context,
+                  icon: Icons.star_rounded,
+                  label: 'Star the project',
+                  onTap: () => Get.bottomSheet(
+                    ConfirmationBottomSheet(
+                      header: "Star the project",
+                      message:
+                          "If you like Prisma QR, please consider giving it a star on GitHub and support the project!\n\nConfirm to proceed to GitHub?",
+                      onConfirm: () {},
+                    ),
+                  ),
                 ),
               ],
             ),

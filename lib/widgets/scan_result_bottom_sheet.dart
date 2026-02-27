@@ -390,9 +390,11 @@ class _ScanResultBottomSheetState extends State<ScanResultBottomSheet> {
                       icon: Icons.share,
                       label: 'Share',
                       onTap: () {
-                        Share.share(
-                          record.data,
-                          subject: 'Shared via Prisma QR',
+                        SharePlus.instance.share(
+                          ShareParams(
+                            text: record.data,
+                            subject: 'Shared via Prisma QR',
+                          ),
                         );
                       },
                     ),

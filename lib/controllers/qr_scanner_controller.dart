@@ -7,6 +7,8 @@ import 'package:uuid/uuid.dart';
 import '../widgets/scan_result_bottom_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:vibration/vibration.dart';
+import 'package:flutter_ringtone_player/flutter_ringtone_player.dart';
 import 'settings_controller.dart';
 import 'bottom_nav_controller.dart';
 
@@ -86,11 +88,17 @@ class QrScannerController extends GetxController {
 
         // Feed back
         if (_settingsController.hapticFeedback.value) {
-          // Placeholder for vibration
+          Vibration.hasVibrator().then((hasVibrator) {
+            if (hasVibrator == true) {
+              Vibration.vibrate(duration: 50);
+            }
+          });
         }
 
         if (_settingsController.scanSounds.value) {
-          // Placeholder for beep sound execution
+          FlutterRingtonePlayer().play(
+            fromAsset: 'assets/sounds/scan_ping.mp3',
+          );
         }
 
         // Determine format roughly

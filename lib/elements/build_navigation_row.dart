@@ -18,6 +18,7 @@ Widget buildNavigationRow(
   final isDark = Theme.of(context).brightness == Brightness.dark;
   return InkWell(
     onTap: onTap,
+    borderRadius: BorderRadius.circular(24),
     child: Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
       child: Row(

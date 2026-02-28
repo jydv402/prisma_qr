@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:prisma_qr_app/elements/build_divider.dart';
 import 'package:prisma_qr_app/widgets/confirmation_bottom_sheet.dart';
 import 'package:prisma_qr_app/controllers/history_controller.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -102,7 +103,7 @@ class SettingsScreen extends StatelessWidget {
           const SizedBox(height: 32),
 
           // Scanner Preferences
-          buildSectionHeader(context, 'Scanner Preferences'),
+          buildSectionHeader(context, 'Scanner Preferences', null),
           Container(
             decoration: BoxDecoration(
               color: Theme.of(context).colorScheme.surface,
@@ -128,7 +129,7 @@ class SettingsScreen extends StatelessWidget {
                         settingsController.toggleHapticFeedback(val),
                   ),
                 ),
-                _buildDivider(context),
+                buildDivider(context),
                 Obx(
                   () => _buildToggleRow(
                     context,
@@ -139,7 +140,7 @@ class SettingsScreen extends StatelessWidget {
                         settingsController.toggleScanSounds(val),
                   ),
                 ),
-                _buildDivider(context),
+                buildDivider(context),
                 Obx(
                   () => _buildToggleRow(
                     context,
@@ -156,7 +157,7 @@ class SettingsScreen extends StatelessWidget {
           const SizedBox(height: 32),
 
           // App Settings
-          buildSectionHeader(context, 'App Settings'),
+          buildSectionHeader(context, 'App Settings', null),
           Container(
             decoration: BoxDecoration(
               color: Theme.of(context).colorScheme.surface,
@@ -187,7 +188,7 @@ class SettingsScreen extends StatelessWidget {
                     },
                   ),
                 ),
-                _buildDivider(context),
+                buildDivider(context),
                 buildNavigationRow(
                   context,
                   icon: Icons.history,
@@ -203,7 +204,7 @@ class SettingsScreen extends StatelessWidget {
                   ),
                 ),
                 // TODO: Implement export and import history
-                // _buildDivider(context),
+                // buildDivider(context),
                 // buildNavigationRow(
                 //   context,
                 //   icon: Icons.file_download_rounded,
@@ -217,7 +218,7 @@ class SettingsScreen extends StatelessWidget {
                 //     ),
                 //   ),
                 // ),
-                // _buildDivider(context),
+                // buildDivider(context),
                 // buildNavigationRow(
                 //   context,
                 //   icon: Icons.file_download_rounded,
@@ -231,7 +232,7 @@ class SettingsScreen extends StatelessWidget {
                 //     ),
                 //   ),
                 // ),
-                // _buildDivider(context),
+                // buildDivider(context),
                 // buildNavigationRow(
                 //   context,
                 //   icon: Icons.upload_file,
@@ -251,7 +252,7 @@ class SettingsScreen extends StatelessWidget {
           const SizedBox(height: 32),
 
           // Support Settings
-          buildSectionHeader(context, 'Support'),
+          buildSectionHeader(context, 'Support', null),
           Container(
             decoration: BoxDecoration(
               color: Theme.of(context).colorScheme.surface,
@@ -287,7 +288,7 @@ class SettingsScreen extends StatelessWidget {
                 //     ),
                 //   ),
                 // ),
-                // _buildDivider(context),
+                // buildDivider(context),
                 buildNavigationRow(
                   context,
                   icon: Icons.star_rounded,
@@ -315,6 +316,14 @@ class SettingsScreen extends StatelessWidget {
     );
   }
 
+  /// Builds a toggle row for a setting.
+  ///
+  /// Parameters:
+  /// - [context]: The build context.
+  /// - [icon]: The icon to display.
+  /// - [label]: The label to display.
+  /// - [value]: The current value of the setting.
+  /// - [onChanged]: The callback to call when the value changes.
   Widget _buildToggleRow(
     BuildContext context, {
     required IconData icon,
@@ -326,27 +335,23 @@ class SettingsScreen extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Row(
-            children: [
-              Container(
-                width: 32,
-                height: 32,
-                decoration: BoxDecoration(
-                  color: isDark ? Colors.grey[700] : Colors.grey[100],
-                  shape: BoxShape.circle,
-                ),
-                child: Icon(
-                  icon,
-                  size: 16,
-                  color: isDark ? Colors.white : Colors.black,
-                ),
-              ),
-              const SizedBox(width: 16),
-              Text(label, style: const TextStyle(fontWeight: FontWeight.w500)),
-            ],
+          Container(
+            width: 32,
+            height: 32,
+            decoration: BoxDecoration(
+              color: isDark ? Colors.grey[700] : Colors.grey[100],
+              shape: BoxShape.circle,
+            ),
+            child: Icon(
+              icon,
+              size: 16,
+              color: isDark ? Colors.white : Colors.black,
+            ),
           ),
+          const SizedBox(width: 16),
+          Text(label, style: const TextStyle(fontWeight: FontWeight.w500)),
+          const Spacer(),
           Switch(
             value: value,
             onChanged: onChanged,
@@ -355,20 +360,14 @@ class SettingsScreen extends StatelessWidget {
                 ? Theme.of(context).colorScheme.primary.withValues(alpha: 0.5)
                 : Colors.black.withValues(alpha: 0.2),
             thumbIcon: WidgetStatePropertyAll(
-              Icon(value ? Icons.check : Icons.close, color: Colors.black),
+              Icon(
+                value ? Icons.check_rounded : Icons.close_rounded,
+                color: !isDark && value ? Colors.black : Colors.white,
+              ),
             ),
           ),
         ],
       ),
-    );
-  }
-
-  Widget _buildDivider(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-    return Divider(
-      height: 1,
-      indent: 64, // Align with text
-      color: isDark ? Colors.grey[800] : Colors.grey[100],
     );
   }
 }

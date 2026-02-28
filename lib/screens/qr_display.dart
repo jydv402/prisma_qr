@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/src/extension_navigation.dart';
-import 'package:prisma_qr_app/elements/build_bottom_button.dart';
+import 'package:prisma_qr_app/elements/build_divider.dart';
+import 'package:prisma_qr_app/elements/build_navigation_row.dart';
 import 'package:prisma_qr_app/elements/build_section_header.dart';
 import 'package:prisma_qr_app/models/qr_code_model.dart';
 import 'package:qr_flutter/qr_flutter.dart';
+import 'package:intl/intl.dart';
 
 class QrDisplayScreen extends StatelessWidget {
   const QrDisplayScreen({super.key});
@@ -48,72 +50,125 @@ class QrDisplayScreen extends StatelessWidget {
       body: ListView(
         padding: const EdgeInsets.symmetric(horizontal: 24),
         children: [
-          const SizedBox(height: 32),
-          buildSectionHeader(context, 'QR Code'),
+          // QR Code Section
+          const SizedBox(height: 16),
+          buildSectionHeader(context, 'QR Code', null),
           Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                SizedBox(
-                  width: size,
-                  height: size,
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(32),
-                    child: QrImageView(
-                      data: record.data,
-                      version: QrVersions.auto,
-                      backgroundColor: Colors.white,
-                      padding: const EdgeInsets.all(24),
-                    ),
+            child: SizedBox(
+              width: size,
+              height: size,
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(32),
+                child: QrImageView(
+                  data: record.data,
+                  version: QrVersions.auto,
+                  backgroundColor: Colors.white,
+                  padding: const EdgeInsets.all(24),
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(height: 16),
+
+          // Options Section
+          buildSectionHeader(context, 'options', null),
+          Container(
+            decoration: BoxDecoration(
+              color: Theme.of(context).colorScheme.surface,
+              borderRadius: BorderRadius.circular(24),
+              boxShadow: [
+                if (!isDark)
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: 0.02),
+                    blurRadius: 10,
+                    offset: const Offset(0, 2),
                   ),
+              ],
+            ),
+            child: Column(
+              children: [
+                buildNavigationRow(
+                  context,
+                  icon: Icons.download_rounded,
+                  label: "Save to Gallery",
+                  onTap: () {
+                    // TODO: Implement save to gallery
+                  },
+                ),
+                buildDivider(context),
+                buildNavigationRow(
+                  context,
+                  icon: Icons.share_rounded,
+                  label: "Share as image",
+                  onTap: () {
+                    // TODO: Implement share as image
+                  },
                 ),
               ],
             ),
           ),
-          const SizedBox(height: 32),
-          buildSectionHeader(context, 'title'),
-          Container(
-            width: size,
-            alignment: .centerStart,
-            decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.surface,
-              borderRadius: BorderRadius.circular(24),
-            ),
-            padding: const EdgeInsets.all(24),
-            child: Text(
-              record.title ??
-                  "${record.type.toUpperCase()} ${record.id.substring(0, 4)}",
-              softWrap: true,
-              style: Theme.of(
-                context,
-              ).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.bold),
-            ),
-          ),
-          const SizedBox(height: 32),
+          const SizedBox(height: 16),
 
-          buildSectionHeader(context, 'raw data'),
-          Container(
-            width: size,
-            alignment: .centerStart,
-            decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.surface,
-              borderRadius: BorderRadius.circular(24),
-            ),
-            padding: const EdgeInsets.all(24),
-            child: Text(
-              record.data,
-              softWrap: true,
-              style: Theme.of(
-                context,
-              ).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.bold),
-            ),
+          // Title Section
+          buildSectionHeader(context, 'title', ' [Selectable Text]'),
+          _buildDataPill(
+            context,
+            record.title ??
+                "${record.type.toUpperCase()} ${record.id.substring(0, 4)}",
+            size,
+            isDark,
           ),
-          const SizedBox(height: 32),
-          buildSectionHeader(context, 'options'),
-          // TODO: Add options
+
+          const SizedBox(height: 16),
+
+          // Raw Data Section
+          buildSectionHeader(context, 'raw data', ' [Selectable Text]'),
+          _buildDataPill(context, record.data, size, isDark),
+
+          const SizedBox(height: 16),
+
+          // Time Stamp
+          buildSectionHeader(context, 'time stamp', null),
+          _buildDataPill(
+            context,
+            "${DateFormat.yMMMMd().format(record.timestamp)} @ ${DateFormat.jm().format(record.timestamp)}",
+            size,
+            isDark,
+          ),
+
           SizedBox(height: size * 0.5),
         ],
+      ),
+    );
+  }
+
+  Widget _buildDataPill(
+    BuildContext context,
+    String data,
+    double size,
+    bool isDark,
+  ) {
+    return Container(
+      width: size,
+      alignment: .centerStart,
+      decoration: BoxDecoration(
+        color: Theme.of(context).colorScheme.surface,
+        borderRadius: BorderRadius.circular(24),
+        boxShadow: [
+          if (!isDark)
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.02),
+              blurRadius: 10,
+              offset: const Offset(0, 2),
+            ),
+        ],
+      ),
+      padding: const EdgeInsets.all(24),
+      child: SelectableText(
+        data,
+        style: Theme.of(
+          context,
+        ).textTheme.bodyLarge?.copyWith(fontWeight: .w500),
       ),
     );
   }

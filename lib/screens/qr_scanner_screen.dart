@@ -188,7 +188,7 @@ class QrScannerScreen extends StatelessWidget {
   }
 
   BorderRadius _getBorderRadius(Alignment alignment) {
-    const r = Radius.circular(12);
+    const r = Radius.circular(18);
     if (alignment == Alignment.topLeft) {
       return const BorderRadius.only(topLeft: r);
     }

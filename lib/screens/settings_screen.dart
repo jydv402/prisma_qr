@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:prisma_qr_app/controllers/history_controller.dart';
 import 'package:prisma_qr_app/widgets/confirmation_bottom_sheet.dart';
+import 'package:prisma_qr_app/controllers/history_controller.dart';
 import 'package:url_launcher/url_launcher.dart';
-import '../controllers/settings_controller.dart';
+import 'package:prisma_qr_app/elements/build_section_header.dart';
+import 'package:prisma_qr_app/elements/build_navigation_row.dart';
+import 'package:prisma_qr_app/controllers/settings_controller.dart';
 
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({super.key});
@@ -100,7 +102,7 @@ class SettingsScreen extends StatelessWidget {
           const SizedBox(height: 32),
 
           // Scanner Preferences
-          _buildSectionHeader(context, 'Scanner Preferences'),
+          buildSectionHeader(context, 'Scanner Preferences'),
           Container(
             decoration: BoxDecoration(
               color: Theme.of(context).colorScheme.surface,
@@ -154,7 +156,7 @@ class SettingsScreen extends StatelessWidget {
           const SizedBox(height: 32),
 
           // App Settings
-          _buildSectionHeader(context, 'App Settings'),
+          buildSectionHeader(context, 'App Settings'),
           Container(
             decoration: BoxDecoration(
               color: Theme.of(context).colorScheme.surface,
@@ -171,7 +173,7 @@ class SettingsScreen extends StatelessWidget {
             child: Column(
               children: [
                 Obx(
-                  () => _buildNavigationRow(
+                  () => buildNavigationRow(
                     context,
                     icon: Icons.dark_mode,
                     label: 'Theme',
@@ -186,7 +188,7 @@ class SettingsScreen extends StatelessWidget {
                   ),
                 ),
                 _buildDivider(context),
-                _buildNavigationRow(
+                buildNavigationRow(
                   context,
                   icon: Icons.history,
                   label: 'Clear History',
@@ -202,7 +204,7 @@ class SettingsScreen extends StatelessWidget {
                 ),
                 // TODO: Implement export and import history
                 // _buildDivider(context),
-                // _buildNavigationRow(
+                // buildNavigationRow(
                 //   context,
                 //   icon: Icons.file_download_rounded,
                 //   label: 'Export to JSON',
@@ -216,7 +218,7 @@ class SettingsScreen extends StatelessWidget {
                 //   ),
                 // ),
                 // _buildDivider(context),
-                // _buildNavigationRow(
+                // buildNavigationRow(
                 //   context,
                 //   icon: Icons.file_download_rounded,
                 //   label: 'Export to CSV',
@@ -230,7 +232,7 @@ class SettingsScreen extends StatelessWidget {
                 //   ),
                 // ),
                 // _buildDivider(context),
-                // _buildNavigationRow(
+                // buildNavigationRow(
                 //   context,
                 //   icon: Icons.upload_file,
                 //   label: 'Import from JSON',
@@ -249,7 +251,7 @@ class SettingsScreen extends StatelessWidget {
           const SizedBox(height: 32),
 
           // Support Settings
-          _buildSectionHeader(context, 'Support'),
+          buildSectionHeader(context, 'Support'),
           Container(
             decoration: BoxDecoration(
               color: Theme.of(context).colorScheme.surface,
@@ -266,7 +268,7 @@ class SettingsScreen extends StatelessWidget {
             child: Column(
               children: [
                 // TODO: Implement check for updates
-                // _buildNavigationRow(
+                // buildNavigationRow(
                 //   context,
                 //   icon: Icons.upload_rounded,
                 //   label: 'Check for updates',
@@ -286,7 +288,7 @@ class SettingsScreen extends StatelessWidget {
                 //   ),
                 // ),
                 // _buildDivider(context),
-                _buildNavigationRow(
+                buildNavigationRow(
                   context,
                   icon: Icons.star_rounded,
                   label: 'Star the project',
@@ -309,22 +311,6 @@ class SettingsScreen extends StatelessWidget {
 
           const SizedBox(height: 32),
         ],
-      ),
-    );
-  }
-
-  Widget _buildSectionHeader(BuildContext context, String title) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-    return Padding(
-      padding: const EdgeInsets.only(left: 8, bottom: 12),
-      child: Text(
-        title.toUpperCase(),
-        style: TextStyle(
-          color: isDark ? Colors.grey[500] : Colors.grey[600],
-          fontSize: 12,
-          fontWeight: FontWeight.w700,
-          letterSpacing: 1.0,
-        ),
       ),
     );
   }
@@ -373,67 +359,6 @@ class SettingsScreen extends StatelessWidget {
             ),
           ),
         ],
-      ),
-    );
-  }
-
-  Widget _buildNavigationRow(
-    BuildContext context, {
-    required IconData icon,
-    required String label,
-    String? valueText,
-    required VoidCallback onTap,
-  }) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-    return InkWell(
-      onTap: onTap,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Row(
-              children: [
-                Container(
-                  width: 32,
-                  height: 32,
-                  decoration: BoxDecoration(
-                    color: isDark ? Colors.grey[700] : Colors.grey[100],
-                    shape: BoxShape.circle,
-                  ),
-                  child: Icon(
-                    icon,
-                    size: 16,
-                    color: isDark ? Colors.white : Colors.black,
-                  ),
-                ),
-                const SizedBox(width: 16),
-                Text(
-                  label,
-                  style: const TextStyle(fontWeight: FontWeight.w500),
-                ),
-              ],
-            ),
-            Row(
-              children: [
-                if (valueText != null)
-                  Text(
-                    valueText,
-                    style: TextStyle(
-                      color: isDark ? Colors.grey[400] : Colors.grey[600],
-                      fontSize: 14,
-                    ),
-                  ),
-                const SizedBox(width: 4),
-                Icon(
-                  Icons.chevron_right,
-                  color: isDark ? Colors.grey[500] : Colors.grey[400],
-                  size: 20,
-                ),
-              ],
-            ),
-          ],
-        ),
       ),
     );
   }

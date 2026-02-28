@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:prisma_qr_app/widgets/confirmation_bottom_sheet.dart';
+import 'package:prisma_qr_app/widgets/rename_bottom_sheet.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:get/get.dart';
@@ -33,48 +34,6 @@ class _ScanResultBottomSheetState extends State<ScanResultBottomSheet> {
   void dispose() {
     _nameController.dispose();
     super.dispose();
-  }
-
-  void _editName(BuildContext context) {
-    _nameController.text = _currentRecord.title ?? '';
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-    Get.defaultDialog(
-      title: "Edit Name",
-      radius: 32,
-      titlePadding: const EdgeInsets.only(top: 24),
-      contentPadding: const EdgeInsets.fromLTRB(32, 12, 32, 24),
-      backgroundColor: isDark ? Colors.grey[900] : Colors.white,
-      titleStyle: TextStyle(color: isDark ? Colors.white : Colors.black),
-      content: TextField(
-        controller: _nameController,
-        style: TextStyle(color: isDark ? Colors.white : Colors.black),
-        decoration: InputDecoration(
-          hintText: "Enter a custom name",
-          hintStyle: TextStyle(
-            color: isDark ? Colors.grey[600] : Colors.grey[400],
-          ),
-        ),
-      ),
-      textConfirm: "Save",
-      textCancel: "Cancel",
-      confirmTextColor: isDark ? Colors.black : Colors.white,
-      cancelTextColor: isDark ? Colors.white : Colors.black,
-      buttonColor: isDark ? Colors.white : Colors.black,
-      onConfirm: () async {
-        final newTitle = _nameController.text.trim().isNotEmpty
-            ? _nameController.text.trim()
-            : null;
-        final updatedRecord = _currentRecord.copyWith(title: newTitle);
-        setState(() {
-          _currentRecord = updatedRecord;
-        });
-
-        if (Get.isRegistered<HistoryController>()) {
-          Get.find<HistoryController>().updateRecord(updatedRecord);
-        }
-        Get.back();
-      },
-    );
   }
 
   @override
@@ -140,7 +99,37 @@ class _ScanResultBottomSheetState extends State<ScanResultBottomSheet> {
                       ),
                       const SizedBox(height: 8),
                       GestureDetector(
-                        onTap: () => _editName(context),
+                        onTap: () => Get.bottomSheet(
+                          RenameBottomSheet(
+                            nameController: _nameController,
+                            title: _currentRecord.title,
+                            onConfirm: () async {
+                              // Get new title from controller
+                              final newTitle =
+                                  _nameController.text.trim().isNotEmpty
+                                  ? _nameController.text.trim()
+                                  : null;
+
+                              // Update record
+                              final updatedRecord = _currentRecord.copyWith(
+                                title: newTitle,
+                              );
+
+                              // Update state
+                              setState(() {
+                                _currentRecord = updatedRecord;
+                              });
+
+                              // Update history controller
+                              if (Get.isRegistered<HistoryController>()) {
+                                Get.find<HistoryController>().updateRecord(
+                                  updatedRecord,
+                                );
+                              }
+                              Get.back();
+                            },
+                          ),
+                        ),
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
@@ -242,7 +231,10 @@ class _ScanResultBottomSheetState extends State<ScanResultBottomSheet> {
                       ),
                     ),
                     IconButton(
-                      icon: Icon(Icons.content_copy, color: Colors.grey[400]),
+                      icon: Icon(
+                        Icons.content_copy_rounded,
+                        color: Colors.grey[400],
+                      ),
                       onPressed: () {
                         Clipboard.setData(ClipboardData(text: record.data));
                         Get.snackbar(
@@ -281,7 +273,7 @@ class _ScanResultBottomSheetState extends State<ScanResultBottomSheet> {
                   Expanded(
                     child: _buildInfoCard(
                       context,
-                      icon: Icons.history,
+                      icon: Icons.history_rounded,
                       title: 'History',
                       subtitle: 'Saved to log',
                     ),
@@ -336,7 +328,7 @@ class _ScanResultBottomSheetState extends State<ScanResultBottomSheet> {
                         ),
                       ),
                       SizedBox(width: 8),
-                      Icon(Icons.open_in_new, size: 18),
+                      Icon(Icons.open_in_new_rounded, size: 18),
                     ],
                   ),
                 ),
@@ -373,7 +365,7 @@ class _ScanResultBottomSheetState extends State<ScanResultBottomSheet> {
                   Expanded(
                     child: _buildSecondaryButton(
                       context,
-                      icon: Icons.share,
+                      icon: Icons.share_rounded,
                       label: 'Share',
                       onTap: () {
                         SharePlus.instance.share(
@@ -381,24 +373,6 @@ class _ScanResultBottomSheetState extends State<ScanResultBottomSheet> {
                             text: record.data,
                             subject: 'Shared via Prisma QR',
                           ),
-                        );
-                      },
-                    ),
-                  ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: _buildSecondaryButton(
-                      context,
-                      icon: Icons.content_copy,
-                      label: 'Copy',
-                      onTap: () {
-                        Clipboard.setData(ClipboardData(text: record.data));
-                        Get.snackbar(
-                          'Copied',
-                          'Data copied to clipboard',
-                          snackPosition: SnackPosition.BOTTOM,
-                          margin: EdgeInsets.fromLTRB(16, 16, 16, 16),
-                          icon: Icon(Icons.done_all_rounded),
                         );
                       },
                     ),
@@ -487,15 +461,14 @@ class _ScanResultBottomSheetState extends State<ScanResultBottomSheet> {
           ),
           elevation: 0,
         ),
-        // child: Row(
-        //   mainAxisAlignment: MainAxisAlignment.center,
-        //   children: [
-        //     Icon(icon, size: 18),
-        //     const SizedBox(width: 8),
-        //     Text(label, style: const TextStyle(fontWeight: FontWeight.w600)),
-        //   ],
-        // ),
-        child: Icon(icon, size: 18),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(icon, size: 18),
+            const SizedBox(width: 8),
+            Text(label, style: const TextStyle(fontWeight: FontWeight.w600)),
+          ],
+        ),
       ),
     );
   }

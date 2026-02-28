@@ -362,7 +362,11 @@ class SettingsScreen extends StatelessWidget {
             thumbIcon: WidgetStatePropertyAll(
               Icon(
                 value ? Icons.check_rounded : Icons.close_rounded,
-                color: !isDark && value ? Colors.black : Colors.white,
+                color: value
+                    ? Colors.black
+                    : isDark
+                    ? Colors.black
+                    : Colors.white,
               ),
             ),
           ),

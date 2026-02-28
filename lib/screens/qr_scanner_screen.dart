@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import '../controllers/qr_scanner_controller.dart';
+import '../widgets/scan_frame.dart';
 
 class QrScannerScreen extends StatelessWidget {
   const QrScannerScreen({super.key});
@@ -81,7 +82,7 @@ class QrScannerScreen extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                _buildScannerFrame(),
+                const AnimatedScannerFrame(),
                 const SizedBox(height: 48),
                 // Flash and Gallery Buttons
                 Row(
@@ -110,95 +111,6 @@ class QrScannerScreen extends StatelessWidget {
         ],
       ),
     );
-  }
-
-  Widget _buildScannerFrame() {
-    return Container(
-      width: 250,
-      height: 250,
-      decoration: BoxDecoration(
-        border: Border.all(
-          color: Colors.white.withValues(alpha: 0.8),
-          width: 3,
-        ),
-        borderRadius: BorderRadius.circular(32),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.white.withValues(alpha: 0.1),
-            blurRadius: 20,
-            spreadRadius: 5,
-          ),
-        ],
-      ),
-      child: Stack(
-        children: [
-          // Corner accents
-          _buildCorner(Alignment.topLeft),
-          _buildCorner(Alignment.topRight),
-          _buildCorner(Alignment.bottomLeft),
-          _buildCorner(Alignment.bottomRight),
-
-          // Simulated scanning line
-          Positioned(
-            top: 20, // This would be animated
-            left: 16,
-            right: 16,
-            child: Container(
-              height: 4,
-              decoration: BoxDecoration(
-                color: Colors.white.withValues(alpha: 0.8),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.white.withValues(alpha: 0.8),
-                    blurRadius: 15,
-                  ),
-                ],
-                borderRadius: BorderRadius.circular(2),
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildCorner(Alignment alignment) {
-    return Align(
-      alignment: alignment,
-      child: Container(
-        width: 32,
-        height: 32,
-        margin: const EdgeInsets.all(8),
-        decoration: BoxDecoration(
-          border: _getBorder(alignment),
-          borderRadius: _getBorderRadius(alignment),
-        ),
-      ),
-    );
-  }
-
-  Border _getBorder(Alignment alignment) {
-    const BorderSide b = BorderSide(color: Colors.white, width: 4);
-    if (alignment == Alignment.topLeft) return const Border(top: b, left: b);
-    if (alignment == Alignment.topRight) return const Border(top: b, right: b);
-    if (alignment == Alignment.bottomLeft) {
-      return const Border(bottom: b, left: b);
-    }
-    return const Border(bottom: b, right: b); // bottomRight
-  }
-
-  BorderRadius _getBorderRadius(Alignment alignment) {
-    const r = Radius.circular(18);
-    if (alignment == Alignment.topLeft) {
-      return const BorderRadius.only(topLeft: r);
-    }
-    if (alignment == Alignment.topRight) {
-      return const BorderRadius.only(topRight: r);
-    }
-    if (alignment == Alignment.bottomLeft) {
-      return const BorderRadius.only(bottomLeft: r);
-    }
-    return const BorderRadius.only(bottomRight: r);
   }
 
   Widget _buildActionButton({

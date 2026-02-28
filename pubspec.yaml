@@ -27,8 +27,6 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^6.0.0
-  package_rename: ^1.10.1
-  flutter_launcher_icons: ^0.14.4
 
 flutter:
   uses-material-design: true
@@ -49,13 +47,3 @@ flutter:
           weight: 500
         - asset: assets/fonts/GSansFlex-SemiBold.ttf
           weight: 600
-
-package_rename_config:
-  android:
-    app_name: "Prisma QR" # Display name
-    package_name: "com.jdmakes.prisma_qr" # Package name
-
-  ios:
-    app_name: "Prisma QR" # Display name
-    bundle_name: "Prisma QR" # Bundle name
-    package_name: "com.jdmakes.prisma_qr" # Product Bundle Identifier

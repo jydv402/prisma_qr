@@ -101,7 +101,7 @@ class QrScannerScreen extends StatelessWidget {
                     _buildActionButton(
                       icon: Icons.image,
                       label: 'Gallery',
-                      onTap: () {},
+                      onTap: () => controller.scanFromGallery(),
                     ),
                   ],
                 ),

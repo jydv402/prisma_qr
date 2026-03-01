@@ -11,6 +11,7 @@ dependencies:
     sdk: flutter
   flutter_ringtone_player: ^4.0.0+4
   get: ^4.7.3
+  image_picker: ^1.2.1
   intl: ^0.20.2
   mobile_scanner: ^7.2.0
   package_info_plus: ^9.0.0
@@ -31,7 +32,7 @@ dev_dependencies:
 flutter:
   uses-material-design: true
   assets:
-    - assets/branding/
+    - assets/branding/prisma_fore.png
     - assets/sounds/
     
   fonts:

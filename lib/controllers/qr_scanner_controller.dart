@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 
 import '../models/qr_code_model.dart';
@@ -86,7 +87,7 @@ class QrScannerController extends GetxController {
         isScanning.value = false;
         mobileController.stop();
 
-        // Feed back
+        // Provide haptic feedback
         if (_settingsController.hapticFeedback.value) {
           Vibration.hasVibrator().then((hasVibrator) {
             if (hasVibrator == true) {
@@ -95,6 +96,7 @@ class QrScannerController extends GetxController {
           });
         }
 
+        // Provide sound feedback
         if (_settingsController.scanSounds.value) {
           FlutterRingtonePlayer().play(
             fromAsset: 'assets/sounds/scan_ping.mp3',
@@ -110,6 +112,7 @@ class QrScannerController extends GetxController {
         } else if (rawValue.startsWith('BEGIN:VCARD')) {
           format = 'Contact';
         }
+        // TODO: Add upi
 
         // Save to history and get the canonical record
         final record = QrCodeRecord(
@@ -121,7 +124,7 @@ class QrScannerController extends GetxController {
         );
         final savedRecord = await _historyController.addRecord(record);
 
-        // Auto Copy hook
+        // Auto Copy hook. Works only if auto-copy is enabled in settings
         if (_settingsController.autoCopy.value) {
           Clipboard.setData(ClipboardData(text: rawValue));
           Get.snackbar(
@@ -143,6 +146,34 @@ class QrScannerController extends GetxController {
         // Resume scanning after bottom sheet is dismissed
         resumeScanning();
       }
+    }
+  }
+
+  // Scan codes from images selected from Gallery
+  Future<void> scanFromGallery() async {
+    // Open the gallery and obtain the image picked by the user
+    final ImagePicker picker = ImagePicker();
+    final XFile? image = await picker.pickImage(source: ImageSource.gallery);
+
+    if (image == null) {
+      // User cancelled the picker
+      return;
+    }
+
+    // Analyze the picked image using the MobileScanner's analyzeImage method
+    final capture = await mobileController.analyzeImage(image.path);
+
+    // Handle the detected barcodes
+    if (capture != null && capture.barcodes.isNotEmpty) {
+      handleBarcode(capture);
+    } else {
+      Get.snackbar(
+        'No QR Code Found',
+        'No QR code was found in the selected image',
+        snackPosition: SnackPosition.BOTTOM,
+        margin: EdgeInsets.fromLTRB(16, 16, 16, 16),
+        icon: Icon(Icons.error_outline),
+      );
     }
   }
 

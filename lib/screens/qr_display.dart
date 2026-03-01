@@ -145,12 +145,21 @@ class QrDisplayScreen extends StatelessWidget {
                   onTap: () {
                     Get.bottomSheet(
                       DetailsBottomSheet(
-                        children: _buildDetailsSection(
-                          context,
-                          record,
-                          size,
-                          isDark,
-                        ),
+                        children: [
+                          Flexible(
+                            child: SingleChildScrollView(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: _buildDetailsSection(
+                                  context,
+                                  record,
+                                  size,
+                                  isDark,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                       isScrollControlled: true,
                     );

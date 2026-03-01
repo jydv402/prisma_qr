@@ -1,6 +1,0 @@
-- [x] Implement save to gallery
-- [x] Implement share as image
-- [x] Animation of QR frame
-- [x] Scan image from gallery
-- [ ] Export and Import function in settings
-- [ ] Check for new app updates in settings

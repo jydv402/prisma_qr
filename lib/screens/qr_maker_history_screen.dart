@@ -248,6 +248,8 @@ class QrMakerHistoryScreen extends StatelessWidget {
             child: TextField(
               controller: controller.textController,
               focusNode: controller.focusNode1,
+              keyboardType: TextInputType.multiline,
+              maxLines: null,
               decoration: InputDecoration(
                 icon: Icon(Icons.link, color: Colors.grey[400]),
                 hintText: 'Enter QR content',

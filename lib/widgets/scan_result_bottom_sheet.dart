@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:prisma_qr_app/elements/build_base_bottom_sheet.dart';
+import 'package:prisma_qr_app/theme/app_theme.dart';
 import 'package:prisma_qr_app/widgets/confirmation_bottom_sheet.dart';
 import 'package:prisma_qr_app/widgets/rename_bottom_sheet.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -54,7 +55,11 @@ class _ScanResultBottomSheetState extends State<ScanResultBottomSheet> {
                 Row(
                   spacing: 4,
                   children: [
-                    _buildTag(record.format, Colors.orange, isDark),
+                    _buildTag(
+                      record.format,
+                      AppTheme.formatColors[record.format] ?? Colors.orange,
+                      isDark,
+                    ),
 
                     _buildTag(record.type.toUpperCase(), Colors.blue, isDark),
 

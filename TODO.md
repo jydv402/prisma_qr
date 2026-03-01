@@ -1,5 +1,5 @@
-- [ ] Implement save to gallery
-- [ ] Implement share as image
+- [x] Implement save to gallery
+- [x] Implement share as image
 - [x] Animation of QR frame
 - [x] Scan image from gallery
 - [ ] Export and Import function in settings

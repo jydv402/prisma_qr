@@ -5,6 +5,8 @@ import 'package:prisma_qr_app/elements/build_divider.dart';
 import 'package:prisma_qr_app/elements/build_navigation_row.dart';
 import 'package:prisma_qr_app/elements/build_section_header.dart';
 import 'package:prisma_qr_app/models/qr_code_model.dart';
+import 'package:prisma_qr_app/utils/image_utils.dart';
+import 'package:prisma_qr_app/widgets/confirmation_bottom_sheet.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:intl/intl.dart';
 
@@ -91,9 +93,17 @@ class QrDisplayScreen extends StatelessWidget {
                   context,
                   icon: Icons.download_rounded,
                   label: "Save to Gallery",
-                  onTap: () {
-                    // TODO: Implement save to gallery
-                  },
+                  onTap: () => Get.bottomSheet(
+                    ConfirmationBottomSheet(
+                      header: 'Save to Gallery',
+                      message:
+                          'Are you sure you want to save this QR code to your gallery?',
+                      onConfirm: () {
+                        // Call the save to gallery function
+                        ImageUtils.saveQrToGallery(record.data, record.title);
+                      },
+                    ),
+                  ),
                 ),
                 buildDivider(context),
                 buildNavigationRow(
@@ -101,7 +111,8 @@ class QrDisplayScreen extends StatelessWidget {
                   icon: Icons.share_rounded,
                   label: "Share as image",
                   onTap: () {
-                    // TODO: Implement share as image
+                    // Call the share as image function
+                    ImageUtils.shareQrImage(record.data);
                   },
                 ),
               ],

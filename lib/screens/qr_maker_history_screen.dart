@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:prisma_qr_app/controllers/bottom_nav_controller.dart';
+import 'package:prisma_qr_app/theme/app_theme.dart';
 import 'package:prisma_qr_app/widgets/history_item.dart';
 import '../controllers/qr_maker_controller.dart';
 import '../controllers/history_controller.dart';
@@ -160,7 +161,9 @@ class QrMakerHistoryScreen extends StatelessWidget {
                               type: record
                                   .type, // Type of the QR, scanned or generated
                               time: timeago.format(record.timestamp),
-                              formatColor: Colors.orange,
+                              formatColor:
+                                  AppTheme.formatColors[record.format] ??
+                                  Colors.orange,
                               typeColor: Colors.blue,
                             ),
                           ),

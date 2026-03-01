@@ -4,6 +4,7 @@ import 'package:prisma_qr_app/widgets/history_item.dart';
 import '../controllers/history_controller.dart';
 import '../widgets/scan_result_bottom_sheet.dart';
 import 'package:timeago/timeago.dart' as timeago;
+import 'package:prisma_qr_app/theme/app_theme.dart';
 
 class ScanSavedHistoryScreen extends StatefulWidget {
   const ScanSavedHistoryScreen({super.key});
@@ -247,7 +248,8 @@ class _ScanSavedHistoryScreenState extends State<ScanSavedHistoryScreen> {
                 format: record.format,
                 type: record.type,
                 time: timeago.format(record.timestamp),
-                formatColor: Colors.orange,
+                formatColor:
+                    AppTheme.formatColors[record.format] ?? Colors.orange,
                 typeColor: Colors.blue,
               ),
             ),
@@ -265,7 +267,7 @@ class _ScanSavedHistoryScreenState extends State<ScanSavedHistoryScreen> {
           key: const ValueKey('saved'),
           children: const [
             SizedBox(height: 60),
-            Center(child: Text('No saved items yet.')),
+            Center(child: Text('No generated items yet.')),
           ],
         );
       }
@@ -289,7 +291,8 @@ class _ScanSavedHistoryScreenState extends State<ScanSavedHistoryScreen> {
                 format: record.format,
                 type: record.type,
                 time: timeago.format(record.timestamp),
-                formatColor: Colors.orange,
+                formatColor:
+                    AppTheme.formatColors[record.format] ?? Colors.orange,
                 typeColor: Colors.blue,
               ),
             ),

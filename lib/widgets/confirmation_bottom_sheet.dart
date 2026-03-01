@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/route_manager.dart';
+import 'package:prisma_qr_app/elements/build_base_bottom_sheet.dart';
 
 class ConfirmationBottomSheet extends StatelessWidget {
   final String header;
@@ -15,98 +16,60 @@ class ConfirmationBottomSheet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    return Container(
-      decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.surface,
-        borderRadius: const BorderRadius.vertical(top: Radius.circular(32)),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.15),
-            blurRadius: 40,
-            offset: const Offset(0, -10),
-          ),
-        ],
-      ),
-      child: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(24, 12, 24, 24),
-          child: Column(
-            mainAxisSize: .min,
-            crossAxisAlignment: .start,
-            children: [
-              // Drag Handle
-              Center(
-                child: Container(
-                  width: 48,
-                  height: 6,
-                  margin: const EdgeInsets.only(bottom: 24),
-                  decoration: BoxDecoration(
-                    color: isDark ? Colors.grey[700] : Colors.grey[300],
-                    borderRadius: BorderRadius.circular(3),
-                  ),
-                ),
-              ),
-              Text(
-                header,
-                style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              const SizedBox(height: 16),
-              Text(message, style: Theme.of(context).textTheme.bodyLarge),
-              const SizedBox(height: 30),
-              Row(
-                children: [
-                  Expanded(
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: isDark
-                            ? Colors.grey[800]
-                            : Colors.grey[100],
-                        foregroundColor: isDark ? Colors.white : Colors.black,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(16),
-                        ),
-                        elevation: 0,
-                      ),
-                      onPressed: () => Get.back(),
-                      child: Text(
-                        "Cancel",
-                        style: TextStyle(
-                          color: isDark ? Colors.white : Colors.black,
-                        ),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        elevation: 0,
-                        backgroundColor: isDark ? Colors.white : Colors.black,
-                        foregroundColor: isDark ? Colors.black : Colors.white,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(16),
-                        ),
-                      ),
-                      onPressed: () {
-                        onConfirm();
-                        Get.back();
-                      },
-                      child: Text(
-                        "Confirm",
-                        style: TextStyle(
-                          color: isDark ? Colors.black : Colors.white,
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
+    return BaseBottomSheet(
+      children: [
+        Text(
+          header,
+          style: Theme.of(
+            context,
+          ).textTheme.headlineMedium?.copyWith(fontWeight: FontWeight.bold),
         ),
-      ),
+        const SizedBox(height: 16),
+        Text(message, style: Theme.of(context).textTheme.bodyLarge),
+        const SizedBox(height: 30),
+        Row(
+          children: [
+            Expanded(
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: isDark ? Colors.grey[800] : Colors.grey[100],
+                  foregroundColor: isDark ? Colors.white : Colors.black,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  elevation: 0,
+                ),
+                onPressed: () => Get.back(),
+                child: Text(
+                  "Cancel",
+                  style: TextStyle(color: isDark ? Colors.white : Colors.black),
+                ),
+              ),
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  elevation: 0,
+                  backgroundColor: isDark ? Colors.white : Colors.black,
+                  foregroundColor: isDark ? Colors.black : Colors.white,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                ),
+                onPressed: () {
+                  onConfirm();
+                  Get.back();
+                },
+                child: Text(
+                  "Confirm",
+                  style: TextStyle(color: isDark ? Colors.black : Colors.white),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ],
     );
   }
 }

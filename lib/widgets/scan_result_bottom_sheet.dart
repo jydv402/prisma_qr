@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:prisma_qr_app/elements/build_base_bottom_sheet.dart';
 import 'package:prisma_qr_app/widgets/confirmation_bottom_sheet.dart';
 import 'package:prisma_qr_app/widgets/rename_bottom_sheet.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -40,349 +41,302 @@ class _ScanResultBottomSheetState extends State<ScanResultBottomSheet> {
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
 
-    return Container(
-      decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.surface,
-        borderRadius: const BorderRadius.vertical(top: Radius.circular(32)),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.15),
-            blurRadius: 40,
-            offset: const Offset(0, -10),
-          ),
-        ],
-      ),
-      child: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(24, 12, 24, 24),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Drag Handle
-              Center(
-                child: Container(
-                  width: 48,
-                  height: 6,
-                  margin: const EdgeInsets.only(bottom: 24),
-                  decoration: BoxDecoration(
-                    color: isDark ? Colors.grey[700] : Colors.grey[300],
-                    borderRadius: BorderRadius.circular(3),
-                  ),
+    return BaseBottomSheet(
+      children: [
+        // Header
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  spacing: 4,
+                  children: [
+                    _buildTag(record.format, Colors.orange, isDark),
+
+                    _buildTag(record.type.toUpperCase(), Colors.blue, isDark),
+
+                    _buildTag(
+                      timeago.format(record.timestamp),
+                      Colors.green,
+                      isDark,
+                    ),
+                  ],
                 ),
-              ),
-              // Header
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                const SizedBox(height: 8),
+                GestureDetector(
+                  onTap: () => Get.bottomSheet(
+                    RenameBottomSheet(
+                      nameController: _nameController,
+                      title: _currentRecord.title,
+                      onConfirm: () async {
+                        // Get new title from controller
+                        final newTitle = _nameController.text.trim().isNotEmpty
+                            ? _nameController.text.trim()
+                            : null;
+
+                        // Update record
+                        final updatedRecord = _currentRecord.copyWith(
+                          title: newTitle,
+                        );
+
+                        // Update state
+                        setState(() {
+                          _currentRecord = updatedRecord;
+                        });
+
+                        // Update history controller
+                        if (Get.isRegistered<HistoryController>()) {
+                          Get.find<HistoryController>().updateRecord(
+                            updatedRecord,
+                          );
+                        }
+                        Get.back();
+                      },
+                    ),
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
                     children: [
-                      Row(
-                        spacing: 4,
-                        children: [
-                          _buildTag(record.format, Colors.orange, isDark),
-
-                          _buildTag(
-                            record.type.toUpperCase(),
-                            Colors.blue,
-                            isDark,
-                          ),
-
-                          _buildTag(
-                            timeago.format(record.timestamp),
-                            Colors.green,
-                            isDark,
-                          ),
-                        ],
+                      Text(
+                        record.title ??
+                            (record.type == 'scan'
+                                ? 'Scan ${record.id.substring(0, 4)}'
+                                : 'Generated ${record.id.substring(0, 4)}'),
+                        style: Theme.of(context).textTheme.headlineMedium
+                            ?.copyWith(fontWeight: FontWeight.bold),
                       ),
-                      const SizedBox(height: 8),
-                      GestureDetector(
-                        onTap: () => Get.bottomSheet(
-                          RenameBottomSheet(
-                            nameController: _nameController,
-                            title: _currentRecord.title,
-                            onConfirm: () async {
-                              // Get new title from controller
-                              final newTitle =
-                                  _nameController.text.trim().isNotEmpty
-                                  ? _nameController.text.trim()
-                                  : null;
-
-                              // Update record
-                              final updatedRecord = _currentRecord.copyWith(
-                                title: newTitle,
-                              );
-
-                              // Update state
-                              setState(() {
-                                _currentRecord = updatedRecord;
-                              });
-
-                              // Update history controller
-                              if (Get.isRegistered<HistoryController>()) {
-                                Get.find<HistoryController>().updateRecord(
-                                  updatedRecord,
-                                );
-                              }
-                              Get.back();
-                            },
-                          ),
-                        ),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Text(
-                              record.title ??
-                                  (record.type == 'scan'
-                                      ? 'Scan ${record.id.substring(0, 4)}'
-                                      : 'Generated ${record.id.substring(0, 4)}'),
-                              style: Theme.of(context).textTheme.headlineMedium
-                                  ?.copyWith(fontWeight: FontWeight.bold),
-                            ),
-                            const SizedBox(width: 8),
-                            Icon(
-                              Icons.edit,
-                              size: 20,
-                              color: isDark
-                                  ? Colors.grey[400]
-                                  : Colors.grey[600],
-                            ),
-                          ],
-                        ),
+                      const SizedBox(width: 8),
+                      Icon(
+                        Icons.edit,
+                        size: 20,
+                        color: isDark ? Colors.grey[400] : Colors.grey[600],
                       ),
                     ],
                   ),
-                  // QR Image
-                  GestureDetector(
-                    onTap: () {
-                      Get.toNamed('/qrDisplay', arguments: record);
-                    },
-                    child: SizedBox(
-                      width: 63,
-                      height: 63,
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(8),
-                        child: QrImageView(
-                          data: record.data,
-                          version: QrVersions.auto,
-                          backgroundColor: Colors.white,
-                          padding: const EdgeInsets.all(8),
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-
-              const SizedBox(height: 24),
-
-              // Link Container
-              Container(
-                padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  color: isDark
-                      ? Colors.black.withValues(alpha: 0.2)
-                      : Colors.grey[50],
-                  border: Border.all(
-                    color: isDark
-                        ? Colors.grey[800]!.withValues(alpha: 0.5)
-                        : Colors.grey[100]!,
-                  ),
-                  borderRadius: BorderRadius.circular(20),
                 ),
-                child: Row(
+              ],
+            ),
+            // QR Image
+            GestureDetector(
+              onTap: () {
+                Get.toNamed('/qrDisplay', arguments: record);
+              },
+              child: SizedBox(
+                width: 63,
+                height: 63,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(8),
+                  child: QrImageView(
+                    data: record.data,
+                    version: QrVersions.auto,
+                    backgroundColor: Colors.white,
+                    padding: const EdgeInsets.all(8),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+
+        const SizedBox(height: 24),
+
+        // Link Container
+        Container(
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            color: isDark
+                ? Colors.black.withValues(alpha: 0.2)
+                : Colors.grey[50],
+            border: Border.all(
+              color: isDark
+                  ? Colors.grey[800]!.withValues(alpha: 0.5)
+                  : Colors.grey[100]!,
+            ),
+            borderRadius: BorderRadius.circular(20),
+          ),
+          child: Row(
+            children: [
+              Container(
+                width: 40,
+                height: 40,
+                decoration: BoxDecoration(
+                  color: Colors.blue.withValues(alpha: isDark ? 0.3 : 0.1),
+                  shape: BoxShape.circle,
+                ),
+                child: Icon(
+                  _getIconForFormat(record.format),
+                  color: Colors.blue,
+                  size: 20,
+                ),
+              ),
+              const SizedBox(width: 16),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Container(
-                      width: 40,
-                      height: 40,
-                      decoration: BoxDecoration(
-                        color: Colors.blue.withValues(
-                          alpha: isDark ? 0.3 : 0.1,
-                        ),
-                        shape: BoxShape.circle,
-                      ),
-                      child: Icon(
-                        _getIconForFormat(record.format),
-                        color: Colors.blue,
-                        size: 20,
-                      ),
+                    Text(
+                      record.data,
+                      style: const TextStyle(fontWeight: FontWeight.w500),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                     ),
-                    const SizedBox(width: 16),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            record.data,
-                            style: const TextStyle(fontWeight: FontWeight.w500),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                          Text(
-                            _getLinkSubtext(),
-                            style: TextStyle(
-                              color: _getLinkSubtextColor(isDark),
-                              fontSize: 12,
-                            ),
-                          ),
-                        ],
+                    Text(
+                      _getLinkSubtext(),
+                      style: TextStyle(
+                        color: _getLinkSubtextColor(isDark),
+                        fontSize: 12,
                       ),
-                    ),
-                    IconButton(
-                      icon: Icon(
-                        Icons.content_copy_rounded,
-                        color: Colors.grey[400],
-                      ),
-                      onPressed: () {
-                        Clipboard.setData(ClipboardData(text: record.data));
-                        Get.snackbar(
-                          'Copied',
-                          'QR code data copied to clipboard',
-                          snackPosition: SnackPosition.BOTTOM,
-                          margin: EdgeInsets.fromLTRB(16, 16, 16, 16),
-                          icon: Icon(Icons.done_all_rounded),
-                        );
-                      },
                     ),
                   ],
                 ),
               ),
-
-              const SizedBox(height: 24),
-
-              // Info Cards Grid
-              Row(
-                children: [
-                  Expanded(
-                    child: Builder(
-                      builder: (context) {
-                        final safetyInfo = _getSafetyInfo();
-                        return _buildInfoCard(
-                          context,
-                          icon: safetyInfo.icon,
-                          iconColor: safetyInfo.iconColor,
-                          title: safetyInfo.title,
-                          subtitle: safetyInfo.subtitle,
-                        );
-                      },
-                    ),
-                  ),
-                  const SizedBox(width: 16),
-                  Expanded(
-                    child: _buildInfoCard(
-                      context,
-                      icon: Icons.history_rounded,
-                      title: 'History',
-                      subtitle: 'Saved to log',
-                    ),
-                  ),
-                ],
-              ),
-
-              const SizedBox(height: 32),
-
-              // Action Buttons
-              SizedBox(
-                width: double.infinity,
-                height: 56,
-                child: ElevatedButton(
-                  onPressed: record.format == 'URL'
-                      ? () async {
-                          final uri = Uri.parse(record.data);
-                          if (await canLaunchUrl(uri)) {
-                            await launchUrl(
-                              uri,
-                              mode: LaunchMode.externalApplication,
-                            );
-                          } else {
-                            Get.snackbar(
-                              'Error',
-                              'Could not open URL',
-                              snackPosition: SnackPosition.BOTTOM,
-                              margin: EdgeInsets.fromLTRB(16, 16, 16, 16),
-                              icon: Icon(Icons.error_outline_rounded),
-                            );
-                          }
-                        }
-                      : null,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: isDark ? Colors.white : Colors.black,
-                    foregroundColor: isDark ? Colors.black : Colors.white,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                    elevation: isDark ? 0 : 4,
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        record.format == 'URL'
-                            ? 'Open in Browser'
-                            : 'Cannot Open Link',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      SizedBox(width: 8),
-                      Icon(Icons.open_in_new_rounded, size: 18),
-                    ],
-                  ),
-                ),
-              ),
-              const SizedBox(height: 12),
-              Row(
-                children: [
-                  Expanded(
-                    child: _buildSecondaryButton(
-                      context,
-                      icon: Icons.cleaning_services_rounded,
-                      label: 'Delete',
-                      onTap: () {
-                        Get.bottomSheet(
-                          ConfirmationBottomSheet(
-                            header: "Delete QR Code",
-                            message:
-                                "Are you sure you want to delete this QR code from history?",
-                            onConfirm: () {
-                              if (Get.isRegistered<HistoryController>()) {
-                                Get.find<HistoryController>().deleteRecord(
-                                  _currentRecord.id,
-                                );
-                              }
-                              Get.back();
-                              Get.back();
-                            },
-                          ),
-                        );
-                      },
-                    ),
-                  ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: _buildSecondaryButton(
-                      context,
-                      icon: Icons.share_rounded,
-                      label: 'Share',
-                      onTap: () {
-                        SharePlus.instance.share(
-                          ShareParams(
-                            text: record.data,
-                            subject: 'Shared via Prisma QR',
-                          ),
-                        );
-                      },
-                    ),
-                  ),
-                ],
+              IconButton(
+                icon: Icon(Icons.content_copy_rounded, color: Colors.grey[400]),
+                onPressed: () {
+                  Clipboard.setData(ClipboardData(text: record.data));
+                  Get.snackbar(
+                    'Copied',
+                    'QR code data copied to clipboard',
+                    snackPosition: SnackPosition.BOTTOM,
+                    margin: EdgeInsets.fromLTRB(16, 16, 16, 16),
+                    icon: Icon(Icons.done_all_rounded),
+                  );
+                },
               ),
             ],
           ),
         ),
-      ),
+
+        const SizedBox(height: 24),
+
+        // Info Cards Grid
+        Row(
+          children: [
+            Expanded(
+              child: Builder(
+                builder: (context) {
+                  final safetyInfo = _getSafetyInfo();
+                  return _buildInfoCard(
+                    context,
+                    icon: safetyInfo.icon,
+                    iconColor: safetyInfo.iconColor,
+                    title: safetyInfo.title,
+                    subtitle: safetyInfo.subtitle,
+                  );
+                },
+              ),
+            ),
+            const SizedBox(width: 16),
+            Expanded(
+              child: _buildInfoCard(
+                context,
+                icon: Icons.history_rounded,
+                title: 'History',
+                subtitle: 'Saved to log',
+              ),
+            ),
+          ],
+        ),
+
+        const SizedBox(height: 32),
+
+        // Action Buttons
+        SizedBox(
+          width: double.infinity,
+          height: 56,
+          child: ElevatedButton(
+            onPressed: record.format == 'URL'
+                ? () async {
+                    final uri = Uri.parse(record.data);
+                    if (await canLaunchUrl(uri)) {
+                      await launchUrl(
+                        uri,
+                        mode: LaunchMode.externalApplication,
+                      );
+                    } else {
+                      Get.snackbar(
+                        'Error',
+                        'Could not open URL',
+                        snackPosition: SnackPosition.BOTTOM,
+                        margin: EdgeInsets.fromLTRB(16, 16, 16, 16),
+                        icon: Icon(Icons.error_outline_rounded),
+                      );
+                    }
+                  }
+                : null,
+            style: ElevatedButton.styleFrom(
+              backgroundColor: isDark ? Colors.white : Colors.black,
+              foregroundColor: isDark ? Colors.black : Colors.white,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(16),
+              ),
+              elevation: isDark ? 0 : 4,
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  record.format == 'URL'
+                      ? 'Open in Browser'
+                      : 'Cannot Open Link',
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                ),
+                SizedBox(width: 8),
+                Icon(Icons.open_in_new_rounded, size: 18),
+              ],
+            ),
+          ),
+        ),
+        const SizedBox(height: 12),
+        Row(
+          children: [
+            Expanded(
+              child: _buildSecondaryButton(
+                context,
+                icon: Icons.cleaning_services_rounded,
+                label: 'Delete',
+                onTap: () {
+                  Get.bottomSheet(
+                    ConfirmationBottomSheet(
+                      header: "Delete QR Code",
+                      message:
+                          "Are you sure you want to delete this QR code from history?",
+                      onConfirm: () {
+                        if (Get.isRegistered<HistoryController>()) {
+                          Get.find<HistoryController>().deleteRecord(
+                            _currentRecord.id,
+                          );
+                        }
+                        Get.back();
+                        Get.back();
+                      },
+                    ),
+                  );
+                },
+              ),
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: _buildSecondaryButton(
+                context,
+                icon: Icons.share_rounded,
+                label: 'Share',
+                onTap: () {
+                  SharePlus.instance.share(
+                    ShareParams(
+                      text: record.data,
+                      subject: 'Shared via Prisma QR',
+                    ),
+                  );
+                },
+              ),
+            ),
+          ],
+        ),
+      ],
     );
   }
 

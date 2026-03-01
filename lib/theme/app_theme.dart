@@ -1,3 +1,5 @@
+import 'dart:collection';
+
 import 'package:flutter/material.dart';
 
 class AppTheme {
@@ -102,6 +104,11 @@ class AppTheme {
           fontWeight: FontWeight.w500,
         ),
       ),
+      textSelectionTheme: TextSelectionThemeData(
+        cursorColor: bgDark,
+        selectionColor: bgDark.withValues(alpha: 0.3),
+        selectionHandleColor: bgDark,
+      ),
       useMaterial3: true,
     );
   }
@@ -181,7 +188,20 @@ class AppTheme {
           fontWeight: FontWeight.w500,
         ),
       ),
+      textSelectionTheme: TextSelectionThemeData(
+        cursorColor: bgLight,
+        selectionColor: bgLight.withValues(alpha: 0.3),
+        selectionHandleColor: bgLight,
+      ),
       useMaterial3: true,
     );
   }
+
+  static const Map<String, Color> formatColors = {
+    'URL': Colors.pink,
+    'Wi-Fi': Colors.deepPurple,
+    'Text': Colors.deepOrange,
+    'vCard': Colors.red,
+    'UPI': Colors.purple,
+  };
 }
